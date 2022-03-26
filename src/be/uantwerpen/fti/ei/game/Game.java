@@ -3,7 +3,7 @@ package be.uantwerpen.fti.ei.game;
 import be.uantwerpen.fti.ei.GraphicsCTX;
 
 public class Game {
-    public Game(GraphicsCTX gctx){
+    public Game(AFact af){
     }
     public void run(){
         build();

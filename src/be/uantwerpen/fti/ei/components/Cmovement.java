@@ -7,4 +7,10 @@ public class Cmovement {
     private float dx;
     private float dy;
     private boolean[] collisionflags;
+    public Cmovement(float x, float y){
+        this.x = x;
+        this.y = y;
+        this.dx = 0;
+        this.dy = 0;
+    }
 }
