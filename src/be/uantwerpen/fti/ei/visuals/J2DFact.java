@@ -14,7 +14,7 @@ public class J2DFact extends AFact {
     public J2DFact(){}
 
     @Override
-    public APlayer createPlayer(int x, int y) {
+    public APlayer createPlayer(int x, int y, int lives, GraphicsCTX gctx) {
         APlayer player = new J2DPlayer();
         float realx = (float) x*resolution;
         float realy = (float) y*resolution;
@@ -23,19 +23,19 @@ public class J2DFact extends AFact {
     }
 
     @Override
-    public AEnemy createEnemy(int[] x, int[] y) {
+    public AEnemy createEnemy(int[] x, int[] y, GraphicsCTX gctx) {
         AEnemy enemy = new J2DEnemy();
         enemy.setC_move(createMovables(x,y, resolution));
         return enemy;
     }
 
     @Override
-    public AObstacle createObstacle(int[] x, int[] y) {
+    public AObstacle createObstacle(int[] x, int[] y, GraphicsCTX gctx) {
         return new J2DObstacle();
     }
 
     @Override
-    public ACollectable createCollectable(int[] x, int[] y) {
+    public ACollectable createCollectable(int[] x, int[] y, GraphicsCTX gctx) {
         return new J2DCollectable();
     }
 
