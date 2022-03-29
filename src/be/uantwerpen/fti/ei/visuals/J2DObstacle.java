@@ -17,9 +17,9 @@ import java.util.Map;
 public class J2DObstacle extends AObstacle {
 
     private final GraphicsCTX gctx;
-    private final Map<Integer, Integer> pos;
+    private final Map<Integer, int[]> pos;
 
-    public J2DObstacle(Map<Integer, Integer> pos, GraphicsCTX gctx){
+    public J2DObstacle(Map<Integer, int[]> pos, GraphicsCTX gctx){
         this.gctx = gctx;
         this.pos = pos;
     }
@@ -32,20 +32,23 @@ public class J2DObstacle extends AObstacle {
         Graphics2D g2d = getGctx().getG2d();
         int blocksize = getGctx().getSize();
         g2d.setColor(new Color(0,0,255));
-        for (Map.Entry<Integer, Integer> entry:getPos().entrySet()){
+        for (Map.Entry<Integer, int[]> entry:getPos().entrySet()){
+            int[] ys = entry.getValue();
+            for (int y : ys){
+                g2d.fillRect(
+                        entry.getKey()*blocksize,
+                        y*blocksize,
+                        blocksize,
+                        blocksize
+                );
+            }
 
-            g2d.fillRect(
-                    entry.getKey()*blocksize,
-                    entry.getValue()*blocksize,
-                    blocksize,
-                    blocksize
-            );
 
 
         }
 
     }
-    public Map<Integer, Integer> getPos() {
+    public Map<Integer, int[]> getPos() {
         return this.pos;
     }
 

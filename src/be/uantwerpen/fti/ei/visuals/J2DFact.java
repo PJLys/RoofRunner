@@ -31,10 +31,10 @@ public class J2DFact extends AFact {
         enemy.setC_move(createMovables(x,y, gctx.getSize()));
         return enemy;
     }
-    public AObstacle createObstacle(Map<Integer, Integer> pos) {
+    public AObstacle createObstacle(Map<Integer, int[]> pos) {
         return new J2DObstacle(pos, gctx);
     }
-    public ACollectable createCollectable(Map<Integer, Integer> pos) {
+    public ACollectable createCollectable(Map<Integer, int[]> pos) {
         return new J2DCollectable(pos, gctx);
     }
     public Input createInput() {

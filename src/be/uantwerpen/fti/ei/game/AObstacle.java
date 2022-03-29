@@ -8,5 +8,5 @@ public abstract class AObstacle extends AEntity {
 
     @Override
     public abstract void vis();
-    public abstract Map<Integer, Integer> getPos();
+    public abstract Map<Integer, int[]> getPos();
 }

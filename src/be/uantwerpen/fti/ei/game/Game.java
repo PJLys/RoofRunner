@@ -21,12 +21,15 @@ public class Game {
 
 
     // TESTING if the draw function works
-    private final Map<Integer, Integer> blocks = new HashMap<>(Map.of(
-            1,12,2,12,3,12,4,12,5,12,6,10,7,9,8,8,9,7
+    private final Map<Integer, int[]> blocks = new HashMap<>(Map.of(
+            1, new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+            2, new int[] {10,11},
+            3, new int[] {10,11},
+            4, new int[] {10,11}
     ));
 
-    private final Map<Integer, Integer> collectables = new HashMap<>(Map.of(
-            2,10,4,11
+    private final Map<Integer, int[]> collectables = new HashMap<>(Map.of(
+            2, new int[] {9}, 5, new int[] {8}
     ));
 
 
@@ -48,7 +51,7 @@ public class Game {
                 }
                 else {
                     switch (movement) {
-                        case UP -> player.getC_mov().setDy(-30);
+                        case UP -> player.getC_mov().setDy(-25);
                         case LEFT -> player.getC_mov().setDx(-15);
                         case RIGHT -> player.getC_mov().setDx(15);
                         }
