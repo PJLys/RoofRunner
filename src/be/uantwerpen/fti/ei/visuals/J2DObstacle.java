@@ -23,6 +23,9 @@ public class J2DObstacle extends AObstacle {
         this.gctx = gctx;
         this.pos = pos;
     }
+    public GraphicsCTX getGctx() {
+        return this.gctx;
+    }
 
     @Override
     public void vis() {
@@ -38,16 +41,9 @@ public class J2DObstacle extends AObstacle {
                     blocksize
             );
 
-            g2d.drawRect(
-                    entry.getKey()*blocksize,
-                    entry.getValue()*blocksize,
-                    blocksize,
-                    blocksize);
+
         }
 
-    }
-    public GraphicsCTX getGctx() {
-        return this.gctx;
     }
     public Map<Integer, Integer> getPos() {
         return this.pos;

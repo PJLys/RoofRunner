@@ -23,6 +23,21 @@ public class J2DPlayer extends APlayer {
     public Cmovement getC_mov() {
         return this.c_mov;
     }
+    public void update() {
+        this.c_mov.update();
+    }
+    public float getLowerBound() {
+        return this.c_mov.getY()+2*gctx.getSize();
+    }
+    public float getUpperBound() {
+        return this.c_mov.getY();
+    }
+    public float getLeftBound() {
+        return this.c_mov.getX();
+    }
+    public float getRightBound() {
+        return this.c_mov.getX()+gctx.getSize();
+    }
 
     public void setGctx(GraphicsCTX gctx){
         this.gctx = gctx;

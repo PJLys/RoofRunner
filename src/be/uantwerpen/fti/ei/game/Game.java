@@ -1,9 +1,6 @@
 package be.uantwerpen.fti.ei.game;
 
 import be.uantwerpen.fti.ei.Input;
-import be.uantwerpen.fti.ei.visuals.J2DCollectable;
-import be.uantwerpen.fti.ei.visuals.J2DObstacle;
-import be.uantwerpen.fti.ei.visuals.J2DPlayer;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,13 +43,22 @@ public class Game {
                 if (movement == Input.Inputs.SPACE)
                     paused = !paused;
                 else {
-                    System.out.println("movementupdater");
+                    switch (movement) {
+                        case UP -> player.getC_mov().setDy(-5);
+                        case LEFT -> player.getC_mov().setDx(-5);
+                        case RIGHT -> player.getC_mov().setDx(5);
+                        }
+                    }
                 }
+            else {
+                player.getC_mov().setDy(0);
+                player.getC_mov().setDx(0);
             }
             if (!paused) {
                 obstacle.vis();
                 collectable.vis();
                 player.vis();
+                player.update();
                 af.getGctx().render();
             }
             try{

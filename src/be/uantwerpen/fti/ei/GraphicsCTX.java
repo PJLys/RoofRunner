@@ -63,7 +63,7 @@ public class GraphicsCTX {
         frame.setSize(ScreenWidth, ScreenHeight);
         g2dimage = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
         g2d = g2dimage.createGraphics();
-        g2d.setBackground(new Color(255, 255, 255, 255));
+        g2d.setBackground(new Color(0, 0, 0, 255));
         g2d.clearRect(0,0, frame.getWidth(), frame.getHeight());
     }
 }

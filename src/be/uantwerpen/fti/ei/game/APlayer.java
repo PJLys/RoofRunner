@@ -9,4 +9,9 @@ public abstract class APlayer {
     public abstract void vis();
     public abstract void setC_mov(Cmovement c_mov);
     public abstract Cmovement getC_mov();
+    public abstract float getLowerBound();
+    public abstract float getLeftBound();
+    public abstract float getRightBound();
+    public abstract float getUpperBound();
+    public abstract void update();
 }
