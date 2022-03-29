@@ -13,4 +13,12 @@ public class Cmovement {
         this.dx = 0;
         this.dy = 0;
     }
+
+    public float getX(){
+        return this.x;
+    }
+
+    public float getY(){
+        return this.y;
+    }
 }

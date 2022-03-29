@@ -3,6 +3,7 @@ package be.uantwerpen.fti.ei.game;
 import be.uantwerpen.fti.ei.Input;
 import be.uantwerpen.fti.ei.visuals.J2DCollectable;
 import be.uantwerpen.fti.ei.visuals.J2DObstacle;
+import be.uantwerpen.fti.ei.visuals.J2DPlayer;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class Game {
     private final AFact af;
     private AObstacle obstacle;
     private ACollectable collectable;
+    private APlayer player;
     private Input input;
     private int cellsX = 25;
     private int cellsY = 15;
@@ -28,11 +30,9 @@ public class Game {
             2,10,4,11
     ));
 
+
     public Game(AFact af){
         this.af = af;
-        this.input = new Input(af.getGctx());
-        this.obstacle = new J2DObstacle(blocks, af.getGctx());
-        this.collectable = new J2DCollectable(collectables, af.getGctx());
     }
 
     public void run(){
@@ -52,6 +52,7 @@ public class Game {
             if (!paused) {
                 obstacle.vis();
                 collectable.vis();
+                player.vis();
                 af.getGctx().render();
             }
             try{
@@ -62,6 +63,9 @@ public class Game {
         }
     }
     private void build(){
-        af.createObstacle(blocks, this.af.getGctx());
+        this.input = af.createInput();
+        this.obstacle = af.createObstacle(blocks);
+        this.collectable = af.createCollectable(collectables);
+        this.player = af.createPlayer(10,6,5);
     }
 }

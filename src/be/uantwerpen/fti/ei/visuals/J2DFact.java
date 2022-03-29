@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.Map.Entry;
 
 public class J2DFact extends AFact {
-    private int resolution;
     private final GraphicsCTX gctx = new GraphicsCTX();
 
     public GraphicsCTX getGctx() {
@@ -20,22 +19,22 @@ public class J2DFact extends AFact {
     public J2DFact(){}
 
     @Override
-    public APlayer createPlayer(int x, int y, int lives, GraphicsCTX gctx) {
-        APlayer player = new J2DPlayer();
-        float realx = (float) x*resolution;
-        float realy = (float) y*resolution;
+    public APlayer createPlayer(int x, int y, int lives) {
+        float realx = (float) x* gctx.getSize();
+        float realy = (float) y* gctx.getSize();
+        APlayer player = new J2DPlayer(gctx);
         player.setC_mov(new Cmovement(realx, realy));
         return player;
     }
-    public AEnemy createEnemy(int[] x, int[] y, GraphicsCTX gctx) {
+    public AEnemy createEnemy(int[] x, int[] y) {
         AEnemy enemy = new J2DEnemy();
-        enemy.setC_move(createMovables(x,y, resolution));
+        enemy.setC_move(createMovables(x,y, gctx.getSize()));
         return enemy;
     }
-    public AObstacle createObstacle(Map<Integer, Integer> pos, GraphicsCTX gctx) {
+    public AObstacle createObstacle(Map<Integer, Integer> pos) {
         return new J2DObstacle(pos, gctx);
     }
-    public ACollectable createCollectable(Map<Integer, Integer> pos, GraphicsCTX gctx) {
+    public ACollectable createCollectable(Map<Integer, Integer> pos) {
         return new J2DCollectable(pos, gctx);
     }
     public Input createInput() {
