@@ -6,7 +6,7 @@ public class Cmovement {
     private float y;
     private float dx;
     private float dy;
-    private enum Collisions {CTOP, CBOTTOM, CLEFT, CRIGHT}
+    private boolean[] collisions = {false,false,false,false};
     public Cmovement(float x, float y){
         this.x = x;
         this.y = y;
@@ -35,5 +35,31 @@ public class Cmovement {
     }
     public float getDx() {
         return this.dx;
+    }
+
+    public boolean getLowFlag(){
+        return collisions[0];
+    }
+    public boolean getUpFlag() {
+        return collisions[1];
+    }
+    public boolean getLeftFlag(){
+        return collisions[2];
+    }
+    public boolean getRightFlag(){
+        return collisions[3];
+    }
+
+    public void setLowFlag(boolean b){
+        collisions[0] = b;
+    }
+    public void setUpFlag(boolean b) {
+        collisions[1] = b;
+    }
+    public void setLeftFlag(boolean b) {
+        collisions[2] = b;
+    }
+    public void setRightFlag(boolean b) {
+        collisions[3] = b;
     }
 }

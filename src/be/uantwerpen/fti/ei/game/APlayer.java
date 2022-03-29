@@ -1,17 +1,21 @@
 package be.uantwerpen.fti.ei.game;
 
-import be.uantwerpen.fti.ei.GraphicsCTX;
 import be.uantwerpen.fti.ei.components.Cmovement;
+import jdk.jfr.BooleanFlag;
 
 public abstract class APlayer {
-    private Cmovement c_mov;
-    private int lives;
     public abstract void vis();
     public abstract void setC_mov(Cmovement c_mov);
     public abstract Cmovement getC_mov();
-    public abstract float getLowerBound();
-    public abstract float getLeftBound();
-    public abstract float getRightBound();
-    public abstract float getUpperBound();
+    @BooleanFlag
+    public abstract boolean getLowerFlag();
+    public abstract boolean getLeftFlag();
+    public abstract boolean getRightFlag();
+    public abstract boolean getUpperFlag();
+    public abstract void setLowerFlag(boolean b);
+    public abstract void setLeftFlag(boolean b);
+    public abstract void setRightFlag(boolean b);
+    public abstract void setUpperFlag(boolean b);
+
     public abstract void update();
 }

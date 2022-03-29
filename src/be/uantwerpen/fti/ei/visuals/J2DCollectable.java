@@ -4,14 +4,15 @@ import be.uantwerpen.fti.ei.GraphicsCTX;
 import be.uantwerpen.fti.ei.game.ACollectable;
 
 import java.awt.*;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class J2DCollectable extends ACollectable {
 
-    Map<Integer,int[]> pos;
+    Map<Integer,LinkedList<Integer>> pos;
     GraphicsCTX gctx;
 
-    public J2DCollectable(Map<Integer, int[]> pos, GraphicsCTX gctx){
+    public J2DCollectable(Map<Integer, LinkedList<Integer>> pos, GraphicsCTX gctx){
         this.pos = pos;
         this.gctx = gctx;
     }
@@ -21,8 +22,8 @@ public class J2DCollectable extends ACollectable {
         Graphics2D g2d = getGctx().getG2d();
         int blocksize = getGctx().getSize();
         g2d.setColor(new Color(255,0,0));
-        for (Map.Entry<Integer, int[]> entry:getPos().entrySet()){
-            int[] ys = entry.getValue();
+        for (Map.Entry<Integer, LinkedList<Integer>> entry:getPos().entrySet()){
+            LinkedList<Integer> ys = entry.getValue();
             for (int y : ys) {
                 g2d.fillRect(
                         entry.getKey() * blocksize,
@@ -36,7 +37,7 @@ public class J2DCollectable extends ACollectable {
     public GraphicsCTX getGctx() {
         return this.gctx;
     }
-    public Map<Integer, int[]> getPos() {
+    public Map<Integer, LinkedList<Integer>> getPos() {
         return this.pos;
     }
 }

@@ -3,6 +3,7 @@ package be.uantwerpen.fti.ei.visuals;
 import be.uantwerpen.fti.ei.GraphicsCTX;
 import be.uantwerpen.fti.ei.components.Cmovement;
 import be.uantwerpen.fti.ei.game.APlayer;
+import jdk.jfr.BooleanFlag;
 
 import java.awt.*;
 
@@ -26,18 +27,32 @@ public class J2DPlayer extends APlayer {
     public void update() {
         this.c_mov.update();
     }
-    public float getLowerBound() {
-        return this.c_mov.getY()+2*gctx.getSize();
+    @BooleanFlag
+    public void setLowerFlag(boolean b){
+        this.c_mov.setLowFlag(b);
     }
-    public float getUpperBound() {
-        return this.c_mov.getY();
+    public void setUpperFlag(boolean b) {
+        this.c_mov.setUpFlag(b);
     }
-    public float getLeftBound() {
-        return this.c_mov.getX();
+    public void setLeftFlag(boolean b) {
+        this.c_mov.setLeftFlag(b);
     }
-    public float getRightBound() {
-        return this.c_mov.getX()+gctx.getSize();
+    public void setRightFlag(boolean b) {
+        this.c_mov.setRightFlag(b);
     }
+    public boolean getLowerFlag() {
+        return this.c_mov.getLowFlag();
+    }
+    public boolean getUpperFlag() {
+        return this.c_mov.getUpFlag();
+    }
+    public boolean getLeftFlag() {
+        return this.c_mov.getLeftFlag();
+    }
+    public boolean getRightFlag() {
+        return this.c_mov.getRightFlag();
+    }
+
 
     public void setGctx(GraphicsCTX gctx){
         this.gctx = gctx;

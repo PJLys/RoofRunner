@@ -34,7 +34,7 @@ public class J2DFact extends AFact {
     public AObstacle createObstacle(Map<Integer, int[]> pos) {
         return new J2DObstacle(pos, gctx);
     }
-    public ACollectable createCollectable(Map<Integer, int[]> pos) {
+    public ACollectable createCollectable(Map<Integer, LinkedList<Integer>> pos) {
         return new J2DCollectable(pos, gctx);
     }
     public Input createInput() {

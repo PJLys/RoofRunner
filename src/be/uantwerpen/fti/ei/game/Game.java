@@ -2,9 +2,7 @@ package be.uantwerpen.fti.ei.game;
 
 import be.uantwerpen.fti.ei.Input;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.Math.abs;
 
@@ -16,6 +14,7 @@ public class Game {
     private ACollectable collectable;
     private APlayer player;
     private Input input;
+    private int score = 0;
     private int cellsX = 25;
     private int cellsY = 15;
 
@@ -28,21 +27,22 @@ public class Game {
             4, new int[] {10,11}
     ));
 
-    private final Map<Integer, int[]> collectables = new HashMap<>(Map.of(
-            2, new int[] {9}, 5, new int[] {8}
+    private final Map<Integer, LinkedList<Integer>> collectables = new HashMap<>(Map.of(
+            2, new LinkedList<Integer>(List.of(9)), 5, new LinkedList<Integer>(List.of(8))
     ));
+
 
 
     public Game(AFact af){
         this.af = af;
     }
-
     public void run(){
         af.getGctx().setGameDimensions(cellsX, cellsY);
         running = true;
         paused = false;
         build();
         while(running){
+            // INPUT
             if (input.inputAvailable()) {
                 Input.Inputs movement = input.getInput();
                 if (movement == Input.Inputs.SPACE) {
@@ -64,6 +64,7 @@ public class Game {
                 else
                     player.getC_mov().setDx(0);
             }
+            // VISUALISATION
             if (!paused) {
                 obstacle.vis();
                 collectable.vis();
@@ -71,6 +72,9 @@ public class Game {
                 player.update();
                 af.getGctx().render();
             }
+            // Collisions
+            detectCollisions();
+            // SLEEP
             try{
                 Thread.sleep(20);
             } catch (InterruptedException e){
@@ -83,5 +87,25 @@ public class Game {
         this.obstacle = af.createObstacle(blocks);
         this.collectable = af.createCollectable(collectables);
         this.player = af.createPlayer(10,6,5);
+    }
+
+    //COLLISIONS
+    private void detectCollisions(){
+        int x_coordinate = (int) player.getC_mov().getX();
+        int y_coordinate = (int) player.getC_mov().getY();
+        int relx = x_coordinate/af.getGctx().getSize();
+        int rely = y_coordinate/af.getGctx().getSize();
+        collectableCollisions(x_coordinate, relx, y_coordinate, rely);
+        obstacleCollisions(x_coordinate, relx, y_coordinate, rely);
+        enemyCollisions(x_coordinate, relx, y_coordinate, rely);
+    }
+    private void collectableCollisions(int realx, int relx, int realy, int rely){
+
+    }
+    private void obstacleCollisions(int realx, int relx, int realy, int rely){
+
+    }
+    private void enemyCollisions(int realx, int relx, int realy, int rely){
+
     }
 }
