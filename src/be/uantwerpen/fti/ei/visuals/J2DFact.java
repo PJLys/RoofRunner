@@ -5,12 +5,18 @@ import be.uantwerpen.fti.ei.Input;
 import be.uantwerpen.fti.ei.components.Cmovement;
 import be.uantwerpen.fti.ei.game.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 
 public class J2DFact extends AFact {
     private int resolution;
     private final GraphicsCTX gctx = new GraphicsCTX();
 
+    public GraphicsCTX getGctx() {
+        return gctx;
+    }
     public J2DFact(){}
 
     @Override
@@ -21,25 +27,17 @@ public class J2DFact extends AFact {
         player.setC_mov(new Cmovement(realx, realy));
         return player;
     }
-
-    @Override
     public AEnemy createEnemy(int[] x, int[] y, GraphicsCTX gctx) {
         AEnemy enemy = new J2DEnemy();
         enemy.setC_move(createMovables(x,y, resolution));
         return enemy;
     }
-
-    @Override
-    public AObstacle createObstacle(int[] x, int[] y, GraphicsCTX gctx) {
-        return new J2DObstacle();
+    public AObstacle createObstacle(Map<Integer, Integer> pos, GraphicsCTX gctx) {
+        return new J2DObstacle(pos, gctx);
     }
-
-    @Override
-    public ACollectable createCollectable(int[] x, int[] y, GraphicsCTX gctx) {
-        return new J2DCollectable();
+    public ACollectable createCollectable(Map<Integer, Integer> pos, GraphicsCTX gctx) {
+        return new J2DCollectable(pos, gctx);
     }
-
-    @Override
     public Input createInput() {
         return new Input(gctx);
     }

@@ -24,8 +24,8 @@ public class GraphicsCTX {
     }
 
     public GraphicsCTX(){
-        ScreenWidth = 800;
-        ScreenHeight = 600;
+        ScreenWidth = 1400;
+        ScreenHeight = 810;
         frame = new JFrame();
         panel = new JPanel(true){
             @Override
@@ -46,6 +46,7 @@ public class GraphicsCTX {
     public void render() {
         panel.repaint();
     }
+
     private void doDrawing(Graphics g){
         Graphics2D graph2D = (Graphics2D) g;
         Toolkit.getDefaultToolkit().sync();
@@ -62,7 +63,7 @@ public class GraphicsCTX {
         frame.setSize(ScreenWidth, ScreenHeight);
         g2dimage = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
         g2d = g2dimage.createGraphics();
-        g2d.setBackground(new Color(0,0,0));
+        g2d.setBackground(new Color(255, 255, 255, 255));
         g2d.clearRect(0,0, frame.getWidth(), frame.getHeight());
     }
 }

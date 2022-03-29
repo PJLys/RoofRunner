@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public class Input {
     public enum Inputs {LEFT, RIGHT, UP, SPACE};
-    private LinkedList<Inputs> keyInputs;
+    private final LinkedList<Inputs> keyInputs;
 
     public Input(GraphicsCTX gctx) {
         gctx.getFrame().addKeyListener(new KeyInputAdapter());
@@ -22,11 +22,11 @@ public class Input {
         @Override
         public void keyPressed(KeyEvent e) {
             int keyCode = e.getKeyCode();
-            switch (keyCode){
-                case KeyEvent.VK_LEFT : keyInputs.add(Inputs.LEFT); break;
-                case KeyEvent.VK_RIGHT: keyInputs.add(Inputs.RIGHT); break;
-                case KeyEvent.VK_UP: keyInputs.add(Inputs.UP); break;
-                case KeyEvent.VK_SPACE: keyInputs.add(Inputs.SPACE); break;
+            switch (keyCode) {
+                case KeyEvent.VK_LEFT -> keyInputs.add(Inputs.LEFT);
+                case KeyEvent.VK_RIGHT -> keyInputs.add(Inputs.RIGHT);
+                case KeyEvent.VK_UP -> keyInputs.add(Inputs.UP);
+                case KeyEvent.VK_SPACE -> keyInputs.add(Inputs.SPACE);
             }
         }
     }

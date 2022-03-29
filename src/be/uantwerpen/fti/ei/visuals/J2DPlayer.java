@@ -6,6 +6,7 @@ import be.uantwerpen.fti.ei.game.APlayer;
 
 public class J2DPlayer extends APlayer {
     private GraphicsCTX gctx;
+
     @Override
     public void vis() {
 
@@ -13,6 +14,5 @@ public class J2DPlayer extends APlayer {
 
     @Override
     public void setC_mov(Cmovement c_mov) {
-
     }
 }

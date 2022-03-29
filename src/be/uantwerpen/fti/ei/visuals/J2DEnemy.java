@@ -12,7 +12,6 @@ public class J2DEnemy extends AEnemy {
     public void vis() {
 
     }
-    @Override
     public void setC_move(LinkedList<Cmovement> c_move) {
 
     }
