@@ -33,6 +33,12 @@ public class J2DPlayer extends APlayer {
         positions[3] = (int) this.c_mov.getY();
         return positions;
     }
+    public void resetflags(){
+        this.c_mov.setUpFlag(false);
+        this.c_mov.setRightFlag(false);
+        this.c_mov.setLeftFlag(false);
+        this.c_mov.setLowFlag(false);
+    }
     @BooleanFlag
     public void setLowerFlag(boolean b){
         this.c_mov.setLowFlag(b);
@@ -66,8 +72,8 @@ public class J2DPlayer extends APlayer {
     public GraphicsCTX getGctx(){
         return this.gctx;
     }
-
     public J2DPlayer(GraphicsCTX gctx){
         this.gctx = gctx;
     }
+
 }

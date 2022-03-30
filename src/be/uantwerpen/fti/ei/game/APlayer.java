@@ -16,6 +16,7 @@ public abstract class APlayer {
     public abstract void setLeftFlag(boolean b);
     public abstract void setRightFlag(boolean b);
     public abstract void setUpperFlag(boolean b);
+    public abstract void resetflags();
 
     public abstract int[] update();
 }

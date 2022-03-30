@@ -28,7 +28,7 @@ public class Game {
     ));
 
     private final Map<Integer, LinkedList<Integer>> collectables = new HashMap<>(Map.of(
-            2, new LinkedList<Integer>(List.of(9)), 5, new LinkedList<Integer>(List.of(8))
+            2, new LinkedList<Integer>(List.of(8,9)), 5, new LinkedList<Integer>(List.of(8))
     ));
 
 
@@ -51,14 +51,14 @@ public class Game {
                 }
                 else {
                     switch (movement) {
-                        case UP -> player.getC_mov().setDy(-25);
-                        case LEFT -> player.getC_mov().setDx(-15);
-                        case RIGHT -> player.getC_mov().setDx(15);
+                        case UP -> case_up(player.getUpperFlag());
+                        case LEFT -> case_left(player.getLeftFlag());
+                        case RIGHT -> case_right(player.getRightFlag());
                         }
                     }
                 }
             else {
-                player.getC_mov().setDy(player.getC_mov().getDy()+2);
+                case_down(player.getLowerFlag());
                 if (abs(player.getC_mov().getDx()*.9f)>.1)
                     player.getC_mov().setDx(player.getC_mov().getDx()*.9f);
                 else
@@ -69,6 +69,7 @@ public class Game {
                 obstacle.vis();
                 collectable.vis();
                 player.vis();
+                player.resetflags();
                 int[] positions = player.update();
                 detectCollisions(positions);
                 af.getGctx().render();
@@ -104,7 +105,7 @@ public class Game {
         int rely1 = (int) (y1/af.getGctx().getSize());
         //Collision detection can start, for this I use separate functions to keep everything clean.
         collectableCollisions(relx0, relx1, rely0, rely1);
-        //obstacleCollisions(x_coordinate, relx, y_coordinate, rely);
+        obstacleCollisions(relx0, relx1, rely0, rely1);
         //enemyCollisions(x_coordinate, relx, y_coordinate, rely);
     }
     private void collectableCollisions(int x0, int x1, int y0, int y1){
@@ -112,19 +113,17 @@ public class Game {
 
         // if we moved a block
         if (x0!=x1 || y0!=y1){
-            System.out.println("We moved a block");
             // check if there are any collectables at this or the following vertical line
             for (Integer xcoordinate=x1; xcoordinate<=x1+1; xcoordinate++) {
-                if (collectables.containsKey(xcoordinate)) {
-                    System.out.println("There is a collectable on this line");
-                    LinkedList<Integer> ycoords = collectables.get(xcoordinate);
+                if (this.collectable.getPos().containsKey(xcoordinate)) {
+                    LinkedList<Integer> ycoords = this.collectable.getPos().get(xcoordinate);
                     // check if we hit any blocks with our head, body or feet
                     for (Integer ycoordinate : ycoords) {
                         // if we have a hit, remove the corresponding block
                         if (ycoordinate == y1 || ycoordinate == y1 + 1 || ycoordinate == y1 + 2) {
                             ycoords.remove(ycoordinate);
                             if (ycoords.isEmpty()){
-                                collectables.remove(xcoordinate);
+                                this.collectable.getPos().remove(xcoordinate);
                             }
                             score += 1;
                             System.out.println("Score: " + score);
@@ -138,28 +137,80 @@ public class Game {
     private void obstacleCollisions(int x0, int x1, int y0, int y1){
         // check for collisions if we moved horizontally
         if (x0!=x1){
-            System.out.println("We moved horizontally");
             // Is there a collectable with this x coordinate?
-            if (collectables.containsKey(x1)) {
-                // get the y_coordinates of every collectable at x
-                LinkedList<Integer> y_coordinates = collectables.get(x1);
-                // use streams to check if there is an overlap
-                // if there's an overlap, set a collision flag
+            if (this.obstacle.getPos().containsKey(x1)) {
+                int[] y_coordinates = this.obstacle.getPos().get(x1);
+                for (int ycoordinate : y_coordinates) {
+                    // if we have a hit, set a collision flag
+                    if (ycoordinate == y1 || ycoordinate == y1 + 1 || ycoordinate == y1 + 2) {
+                        if (x0<x1){
+                            player.setRightFlag(true);
+                            System.out.println("Collision right");
+                        } else {
+                            player.setLeftFlag(true);
+                            System.out.println("Collision left");
+                        }
+                    }
+                }
+
             }
         }
         if (y0!=y1){
-            System.out.println("We moved vertically");
             // Is there a collectable with this x coordinate?
-            if (collectables.containsKey(x1)) {
-                // get the y_coordinates of every collectable at x
-                LinkedList<Integer> y_coordinates = collectables.get(x1);
-                // use streams to check if there is an overlap
-                // if there's an overlap, remove block and
-            }
-        }
+            for (int xcoordinate = x1; xcoordinate<=x1+1; xcoordinate++){
+                if (this.obstacle.getPos().containsKey(xcoordinate)) {
+                    // get the y_coordinates of every collectable at x
+                    int[] y_coordinates = this.obstacle.getPos().get(x1);
+                    if (y_coordinates != null) {
+                        for (int ycoordinate : y_coordinates) {
+                            // if we have a hit, set a collision flag
+                            if (ycoordinate == y1) {
+                                player.setUpperFlag(true);
+                                System.out.println("Collision top");
+                            }
+                            if (ycoordinate==y1+2){
+                                player.setLowerFlag(true);
+                                System.out.println("Collision bottom");
+                            }
+                        }
+                    }
 
+                }
+            }
+
+        }
     }
     private void enemyCollisions(int realx, int relx, int realy, int rely){
 
+    }
+
+    private void case_up(boolean upflag){
+        if (upflag) {
+            if (player.getC_mov().getDy() < 0)
+                player.getC_mov().setDy(-player.getC_mov().getDy());
+        } else{
+            player.getC_mov().setDy(-25);
+        }
+    }
+    private void case_left(boolean leftflag){
+        if (leftflag){
+            player.getC_mov().setDx(-5-player.getC_mov().getDx());
+        } else{
+            player.getC_mov().setDx(-15);
+        }
+    }
+    private void case_right(boolean rightflag) {
+        if (rightflag){
+            player.getC_mov().setDx(5-player.getC_mov().getDx());
+        } else {
+            player.getC_mov().setDx(15);
+        }
+    }
+    private void case_down(boolean lowflag){
+        if (lowflag){
+            player.getC_mov().setDy(0);
+        } else {
+            player.getC_mov().setDy(player.getC_mov().getDy()+2);
+        }
     }
 }
