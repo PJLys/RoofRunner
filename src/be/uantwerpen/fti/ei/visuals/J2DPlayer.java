@@ -24,8 +24,14 @@ public class J2DPlayer extends APlayer {
     public Cmovement getC_mov() {
         return this.c_mov;
     }
-    public void update() {
+    public int[] update() {
+        int[] positions = new int[4];
+        positions[0] = (int) this.c_mov.getX();
+        positions[1] = (int) this.c_mov.getY();
         this.c_mov.update();
+        positions[2] = (int) this.c_mov.getX();
+        positions[3] = (int) this.c_mov.getY();
+        return positions;
     }
     @BooleanFlag
     public void setLowerFlag(boolean b){
