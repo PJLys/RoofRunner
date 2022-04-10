@@ -5,6 +5,7 @@ import be.uantwerpen.fti.ei.Input;
 import java.util.*;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.round;
 
 public class Game {
     private boolean running;
@@ -22,9 +23,11 @@ public class Game {
     // TESTING if the draw function works
     private final Map<Integer, int[]> blocks = new HashMap<>(Map.of(
             1, new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-            2, new int[] {10,11},
-            3, new int[] {10,11},
-            4, new int[] {10,11}
+            2, new int[] {8},
+            3, new int[] {8},
+            4, new int[] {8},
+            5, new int[] {8},
+            6, new int[] {8}
     ));
 
     private final Map<Integer, LinkedList<Integer>> collectables = new HashMap<>(Map.of(
@@ -44,6 +47,7 @@ public class Game {
         while(running){
             // INPUT
             if (input.inputAvailable()) {
+
                 Input.Inputs movement = input.getInput();
                 if (movement == Input.Inputs.SPACE) {
                     paused = !paused;
@@ -51,27 +55,36 @@ public class Game {
                 }
                 else {
                     switch (movement) {
-                        case UP -> case_up(player.getUpperFlag());
-                        case LEFT -> case_left(player.getLeftFlag());
-                        case RIGHT -> case_right(player.getRightFlag());
+                        case UP -> jump(player.isStanding());
+                        case LEFT -> player.getC_mov().setDx(-15);
+                        case RIGHT -> player.getC_mov().setDx(15);
                         }
                     }
                 }
             else {
-                case_down(player.getLowerFlag());
+                if (!player.isStanding())
+                    player.setDy(player.getDy()+2);
+                else {
+                    player.setDy(0);
+                }
                 if (abs(player.getC_mov().getDx()*.9f)>.1)
-                    player.getC_mov().setDx(player.getC_mov().getDx()*.9f);
+                    player.setDx(player.getDx()*.9f);
                 else
                     player.getC_mov().setDx(0);
             }
+
+            int x0 = (int) player.getC_mov().getX();
+            int y0 = (int) player.getC_mov().getY();
+            int x1 = (int) player.getC_mov().getDx()+x0;
+            int y1 = (int) player.getC_mov().getDy()+y0;
+            detectCollisions(new int[]{x0, y0, x1, y1});
+
             // VISUALISATION
             if (!paused) {
+                player.update();
                 obstacle.vis();
                 collectable.vis();
                 player.vis();
-                player.resetflags();
-                int[] positions = player.update();
-                detectCollisions(positions);
                 af.getGctx().render();
             }
 
@@ -88,7 +101,7 @@ public class Game {
         this.input = af.createInput();
         this.obstacle = af.createObstacle(blocks);
         this.collectable = af.createCollectable(collectables);
-        this.player = af.createPlayer(10,6,5);
+        this.player = af.createPlayer(3,4,5);
     }
 
     //COLLISIONS
@@ -135,6 +148,31 @@ public class Game {
 
     }
     private void obstacleCollisions(int x0, int x1, int y0, int y1){
+        if (y0!=y1){
+            // Is there a collectable with this x coordinate?
+            for (int xcoordinate = x1; xcoordinate<=x1+1; xcoordinate++){
+                if (this.obstacle.getPos().containsKey(xcoordinate)) {
+                    // get the y_coordinates of every collectable at x
+                    int[] y_coordinates = this.obstacle.getPos().get(x1);
+                    if (y_coordinates != null) {
+                        for (int ycoordinate : y_coordinates) {
+                            if (ycoordinate == y1) {
+                                player.setDy(abs(player.getC_mov().getDy())/2);
+                                System.out.println("Collision top");
+                            }
+                            if (ycoordinate==y1+2){
+                                player.setY((y1)* af.getGctx().getSize());
+                                player.setDy(0);
+                                player.setStanding(true);
+                                System.out.println("Collision bottom");
+                            }
+                        }
+                        return;
+                    }
+
+                }
+            }
+        }
         // check for collisions if we moved horizontally
         if (x0!=x1){
             // Is there a collectable with this x coordinate?
@@ -144,73 +182,30 @@ public class Game {
                     // if we have a hit, set a collision flag
                     if (ycoordinate == y1 || ycoordinate == y1 + 1 || ycoordinate == y1 + 2) {
                         if (x0<x1){
-                            player.setRightFlag(true);
+                            player.setDx(-abs(player.getC_mov().getDx()));
                             System.out.println("Collision right");
                         } else {
-                            player.setLeftFlag(true);
+                            player.setDx(abs(player.getC_mov().getDx()));
                             System.out.println("Collision left");
                         }
+                        return;
                     }
                 }
-
             }
-        }
-        if (y0!=y1){
-            // Is there a collectable with this x coordinate?
-            for (int xcoordinate = x1; xcoordinate<=x1+1; xcoordinate++){
-                if (this.obstacle.getPos().containsKey(xcoordinate)) {
-                    // get the y_coordinates of every collectable at x
-                    int[] y_coordinates = this.obstacle.getPos().get(x1);
-                    if (y_coordinates != null) {
-                        for (int ycoordinate : y_coordinates) {
-                            // if we have a hit, set a collision flag
-                            if (ycoordinate == y1) {
-                                player.setUpperFlag(true);
-                                System.out.println("Collision top");
-                            }
-                            if (ycoordinate==y1+2){
-                                player.setLowerFlag(true);
-                                System.out.println("Collision bottom");
-                            }
-                        }
-                    }
-
-                }
-            }
-
         }
     }
     private void enemyCollisions(int realx, int relx, int realy, int rely){
 
     }
 
-    private void case_up(boolean upflag){
-        if (upflag) {
-            if (player.getC_mov().getDy() < 0)
-                player.getC_mov().setDy(-player.getC_mov().getDy());
-        } else{
-            player.getC_mov().setDy(-25);
+    //JUMP
+    private void jump(boolean standing){
+        if (standing) {
+            player.setDy(-25);
+            player.setStanding(false);
         }
+        else
+            player.setDy(player.getDy()+2);
     }
-    private void case_left(boolean leftflag){
-        if (leftflag){
-            player.getC_mov().setDx(-5-player.getC_mov().getDx());
-        } else{
-            player.getC_mov().setDx(-15);
-        }
-    }
-    private void case_right(boolean rightflag) {
-        if (rightflag){
-            player.getC_mov().setDx(5-player.getC_mov().getDx());
-        } else {
-            player.getC_mov().setDx(15);
-        }
-    }
-    private void case_down(boolean lowflag){
-        if (lowflag){
-            player.getC_mov().setDy(0);
-        } else {
-            player.getC_mov().setDy(player.getC_mov().getDy()+2);
-        }
-    }
+
 }

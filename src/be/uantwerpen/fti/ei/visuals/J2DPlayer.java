@@ -3,7 +3,6 @@ package be.uantwerpen.fti.ei.visuals;
 import be.uantwerpen.fti.ei.GraphicsCTX;
 import be.uantwerpen.fti.ei.components.Cmovement;
 import be.uantwerpen.fti.ei.game.APlayer;
-import jdk.jfr.BooleanFlag;
 
 import java.awt.*;
 
@@ -24,47 +23,36 @@ public class J2DPlayer extends APlayer {
     public Cmovement getC_mov() {
         return this.c_mov;
     }
-    public int[] update() {
-        int[] positions = new int[4];
-        positions[0] = (int) this.c_mov.getX();
-        positions[1] = (int) this.c_mov.getY();
-        this.c_mov.update();
-        positions[2] = (int) this.c_mov.getX();
-        positions[3] = (int) this.c_mov.getY();
-        return positions;
-    }
-    public void resetflags(){
-        this.c_mov.setUpFlag(false);
-        this.c_mov.setRightFlag(false);
-        this.c_mov.setLeftFlag(false);
-        this.c_mov.setLowFlag(false);
-    }
-    @BooleanFlag
-    public void setLowerFlag(boolean b){
-        this.c_mov.setLowFlag(b);
-    }
-    public void setUpperFlag(boolean b) {
-        this.c_mov.setUpFlag(b);
-    }
-    public void setLeftFlag(boolean b) {
-        this.c_mov.setLeftFlag(b);
-    }
-    public void setRightFlag(boolean b) {
-        this.c_mov.setRightFlag(b);
-    }
-    public boolean getLowerFlag() {
-        return this.c_mov.getLowFlag();
-    }
-    public boolean getUpperFlag() {
-        return this.c_mov.getUpFlag();
-    }
-    public boolean getLeftFlag() {
-        return this.c_mov.getLeftFlag();
-    }
-    public boolean getRightFlag() {
-        return this.c_mov.getRightFlag();
-    }
 
+
+    @Override
+    public void update() {
+        c_mov.update();
+    }
+    public void setX(float newx){
+        this.c_mov.setX(newx);
+    }
+    public void setY(float newy){
+        this.c_mov.setY(newy);
+    }
+    public void setDx(float newdx) {
+        this.c_mov.setDx(newdx);
+    }
+    public void setDy(float newdy) {
+        this.c_mov.setDy(newdy);
+    }
+    public float getDy() {
+        return this.c_mov.getDy();
+    }
+    public float getDx() {
+        return this.c_mov.getDx();
+    }
+    public boolean isStanding() {
+        return this.c_mov.isStanding();
+    }
+    public void setStanding(boolean b) {
+        this.c_mov.setStanding(b);
+    }
 
     public void setGctx(GraphicsCTX gctx){
         this.gctx = gctx;

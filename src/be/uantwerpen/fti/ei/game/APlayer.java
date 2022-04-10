@@ -7,16 +7,14 @@ public abstract class APlayer {
     public abstract void vis();
     public abstract void setC_mov(Cmovement c_mov);
     public abstract Cmovement getC_mov();
-    @BooleanFlag
-    public abstract boolean getLowerFlag();
-    public abstract boolean getLeftFlag();
-    public abstract boolean getRightFlag();
-    public abstract boolean getUpperFlag();
-    public abstract void setLowerFlag(boolean b);
-    public abstract void setLeftFlag(boolean b);
-    public abstract void setRightFlag(boolean b);
-    public abstract void setUpperFlag(boolean b);
-    public abstract void resetflags();
 
-    public abstract int[] update();
+    public abstract void update();
+    public abstract void setX(float newx);
+    public abstract void setY(float newy);
+    public abstract void setDx(float newdx);
+    public abstract void setDy(float newdy);
+    public abstract float getDy();
+    public abstract float getDx();
+    public abstract boolean isStanding();
+    public abstract void setStanding(boolean b);
 }
