@@ -17,4 +17,5 @@ public abstract class APlayer {
     public abstract float getDx();
     public abstract boolean isStanding();
     public abstract void setStanding(boolean b);
+    public abstract int getPlayerSize();
 }

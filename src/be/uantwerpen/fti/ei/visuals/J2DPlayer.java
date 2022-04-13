@@ -13,9 +13,9 @@ public class J2DPlayer extends APlayer {
     @Override
     public void vis() {
         Graphics2D g2d = gctx.getG2d();
-        int blocksize = gctx.getSize();
+        int playersize = (int) (gctx.getSize());
         g2d.setColor(new Color(0,255,0));
-        g2d.fillRect((int) this.c_mov.getX(), (int) this.c_mov.getY(), blocksize, 2*blocksize);
+        g2d.fillRect((int) this.c_mov.getX(), (int) this.c_mov.getY(), playersize, 2*playersize);
     }
     public void setC_mov(Cmovement c_mov) {
         this.c_mov = c_mov;
@@ -23,12 +23,10 @@ public class J2DPlayer extends APlayer {
     public Cmovement getC_mov() {
         return this.c_mov;
     }
-
-
-    @Override
     public void update() {
         c_mov.update();
     }
+
     public void setX(float newx){
         this.c_mov.setX(newx);
     }
@@ -52,6 +50,9 @@ public class J2DPlayer extends APlayer {
     }
     public void setStanding(boolean b) {
         this.c_mov.setStanding(b);
+    }
+    public int getPlayerSize(){
+        return (int) (gctx.getSize()*.8);
     }
 
     public void setGctx(GraphicsCTX gctx){
