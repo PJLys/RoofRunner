@@ -26,6 +26,11 @@ public class J2DFact extends AFact {
         player.setC_mov(new Cmovement(realx, realy));
         return player;
     }
+    public APlayer createPlayer(float x, float y, int lives) {
+        APlayer player = new J2DPlayer(gctx);
+        player.setC_mov(new Cmovement(x, y));
+        return player;
+    }
     public AEnemy createEnemy(int[] x, int[] y) {
         AEnemy enemy = new J2DEnemy();
         enemy.setC_move(createMovables(x,y, gctx.getSize()));

@@ -13,7 +13,7 @@ public class J2DPlayer extends APlayer {
     @Override
     public void vis() {
         Graphics2D g2d = gctx.getG2d();
-        int playersize = (int) (gctx.getSize());
+        int playersize = (int) (gctx.getSize()*.8);
         g2d.setColor(new Color(0,255,0));
         g2d.fillRect((int) this.c_mov.getX(), (int) this.c_mov.getY(), playersize, 2*playersize);
     }
