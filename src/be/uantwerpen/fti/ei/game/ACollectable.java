@@ -1,7 +1,5 @@
 package be.uantwerpen.fti.ei.game;
 
-import be.uantwerpen.fti.ei.GraphicsCTX;
-
 import java.util.LinkedList;
 import java.util.Map;
 

@@ -1,14 +1,12 @@
 package be.uantwerpen.fti.ei.visuals;
 
-import be.uantwerpen.fti.ei.GraphicsCTX;
-import be.uantwerpen.fti.ei.Input;
+import be.uantwerpen.fti.ei.game.Input;
 import be.uantwerpen.fti.ei.components.Cmovement;
+import be.uantwerpen.fti.ei.game.CollisionDetection;
 import be.uantwerpen.fti.ei.game.*;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.LinkedList;
-import java.util.Map.Entry;
 
 public class J2DFact extends AFact {
     private final GraphicsCTX gctx = new GraphicsCTX();
@@ -16,6 +14,7 @@ public class J2DFact extends AFact {
     public GraphicsCTX getGctx() {
         return gctx;
     }
+
     public J2DFact(){}
 
     @Override
@@ -44,6 +43,9 @@ public class J2DFact extends AFact {
     }
     public Input createInput() {
         return new Input(gctx);
+    }
+    public CollisionDetection createCD(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle) {
+        return new CollisionDetection(af, player, collectable, obstacle);
     }
 
     private static LinkedList<Cmovement> createMovables(int[] x, int[] y, int resolution) {

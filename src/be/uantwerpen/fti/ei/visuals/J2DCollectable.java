@@ -1,6 +1,5 @@
 package be.uantwerpen.fti.ei.visuals;
 
-import be.uantwerpen.fti.ei.GraphicsCTX;
 import be.uantwerpen.fti.ei.game.ACollectable;
 
 import java.awt.*;

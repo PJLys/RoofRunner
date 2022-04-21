@@ -1,4 +1,4 @@
-package be.uantwerpen.fti.ei;
+package be.uantwerpen.fti.ei.visuals;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
