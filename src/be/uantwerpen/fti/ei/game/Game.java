@@ -2,9 +2,7 @@ package be.uantwerpen.fti.ei.game;
 
 import be.uantwerpen.fti.ei.Input;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 import static java.lang.Math.*;
 
@@ -24,18 +22,18 @@ public class Game {
     // TESTING if the draw function works
     private final Map<Integer, int[]> blocks = new HashMap<>(Map.of(
             1, new int[] {1, 2, 3, 4, 5, 7, 8, 9, 10},
-            2, new int[] {2,8},
-            3, new int[] {3,8},
-            4, new int[] {3,8},
-            5, new int[] {3,8},
+            2, new int[] {4,8},
+            3, new int[] {4,7,8},
+            4, new int[] {4,8},
+            5, new int[] {8},
             6, new int[] {8},
-            7, new int[] {7,8},
+            7, new int[] {6,8},
             8, new int[] {6,7},
             9, new int[] {6,7}
     ));
 
     private final Map<Integer, LinkedList<Integer>> collectables = new HashMap<>(Map.of(
-            2, new LinkedList<Integer>(List.of(4,5)), 5, new LinkedList<Integer>(List.of(5))
+            2, new LinkedList<>(List.of(4, 5)), 5, new LinkedList<>(List.of(5))
     ));
 
 
@@ -65,12 +63,7 @@ public class Game {
                     }
                 }
             else {
-                if (!player.isStanding())
-                    player.setDy(player.getDy()+2);
-                else {
-                    player.setDy(0);
-                }
-                if (abs(player.getC_mov().getDx()*.6f)>.1)
+                if (abs(player.getDx()*.6f)>.1)
                     player.setDx(player.getDx()*.6f);
                 else
                     player.getC_mov().setDx(0);
@@ -79,17 +72,17 @@ public class Game {
             int y0 = (int) player.getC_mov().getY();
             // VISUALISATION
             if (!paused) {
-                int x1 = (int) player.getC_mov().getDx()+x0;
-                int y1 = (int) player.getC_mov().getDy()+y0;
-                detectCollisions(new int[]{x0, y0, x1, y1});
+                player.setDy(player.getDy()+3);
+                int x1 = (int) player.getDx()+x0;
+                int y1 = (int) player.getDy()+y0;
+                detectCollisions(x0, x1, y0, y1);
+                //if (jumpflag)
+                //    jump(player.isStanding());
                 player.update();
                 obstacle.vis();
                 collectable.vis();
                 player.vis();
                 af.getGctx().render();
-            } else {
-                System.out.println(realToRel2(x0+player.getPlayerSize()));
-                System.out.println(realToRel2(y0+player.getPlayerSize()*2));
             }
 
             // SLEEP
@@ -108,16 +101,10 @@ public class Game {
     }
 
     //COLLISIONS
-    private void detectCollisions(int[] positions){
-        //Firstly, i will import the x and y coordinates of the player
-        int x0 = positions[0];
-        int y0 = positions[1];
-        int x1 = positions[2];
-        int y1 = positions[3];
-
+    private void detectCollisions(float x0, float x1,float y0,float y1){
         //Collision detection can start, for this I use separate functions to keep everything clean.
-        collectableCollisions(realToRel(x0), realToRel(x1), realToRel(y0), realToRel(y1));
-        obstacleCollisions(realToRel2(x0), realToRel(y0), realToRel2(x1),realToRel(y1),x0,x1,y0,y1);
+        collectableCollisions(realtoRel(x0), realtoRel(x1), realtoRel(y0), realtoRel(y1));
+        obstacleCollisions(x0,x1,y0,y1);
         //enemyCollisions(x_coordinate, relx, y_coordinate, rely);
     }
     private void collectableCollisions(int x0, int x1, int y0, int y1){
@@ -146,19 +133,27 @@ public class Game {
         }
 
     }
-    private void obstacleCollisions(int x0, int y0, int x1, int y1, int realx0, int realx1, int realy0, int realy1){
+    private void obstacleCollisions(float x0, float x1, float y0, float y1){
         int blocksize = af.getGctx().getSize();
         int playersize = player.getPlayerSize();
-        boolean truecondition;
-        int xupperbound=1;
 
-        if (x1 == realToRel(realx1 + playersize)) {
-            xupperbound = 0;
-        }
+        boolean pureleft = false;
+        boolean left = false;
+        boolean pureright = false;
+        boolean right = false;
+        boolean pureup = false;
+        boolean up = false;
+        boolean puredown = false;
+        boolean down = false;
 
+        int relx0 = realtoRel(x0);
+        int relx1 = realtoRel(x1);
+        int rely0 = realtoRel(y0);
+        int rely1 = realtoRel(y1);
         // Is there an obstacle with this x coordinate?
-        for (int xcoordinate = x1; xcoordinate<=x1+xupperbound; xcoordinate++){
-            player.setStanding(false);
+        for (int xcoordinate = min(relx1,relx0);
+                                xcoordinate<=max(realtoRel(x1+playersize), realtoRel(x0+playersize));
+                                xcoordinate++){
             if (this.obstacle.getPos().containsKey(xcoordinate)) {
                 // get the y_coordinates of every obstacle at x
                 int[] y_coordinates = this.obstacle.getPos().get(xcoordinate);
@@ -166,60 +161,19 @@ public class Game {
                     for (int ycoordinate : y_coordinates) {
 
                         /*
-                        We have a  collision on the top when:
-                        - our basepoint is in the block or the block to the right
-                        - We moved up
-                         */
-                        if (xupperbound==0){
-                            truecondition = ycoordinate==y1
-                                    && (xcoordinate==x1) && y0>y1;
-                        } else {
-                            truecondition = ycoordinate==y1
-                                    && ((xcoordinate==x1) || xcoordinate==x1+1) && y0>y1;
-                        }
-                        if (truecondition) {
-                            player.setDy(abs(player.getC_mov().getDy()) / 2);
-                        }
-                        /*
-                        We have a collision on the bottom when:
-                        - our lowerbound is lower then the block
-                        - we moved down
-                         */
-                        if (xupperbound==0){
-                            truecondition = (xcoordinate==x1)
-                                    && ycoordinate==realToRel(y1*blocksize+2*playersize)
-                                    && ycoordinate-1==realToRel(y1*blocksize+playersize);
-                        } else {
-                            truecondition = ((xcoordinate==x1) || xcoordinate==x1+1)
-                                    && ycoordinate==realToRel(y1*blocksize+2*playersize)
-                                    && ycoordinate-1==realToRel(y1*blocksize+playersize);
-                        }
-
-                        if (truecondition && !player.isStanding()) {
-                            player.setY(ycoordinate*blocksize-2*playersize);
-                            player.setDy(0);
-                            player.setStanding(true);
-                            System.out.println("B");
-                        }
-
-
-                        /*
                         We have a collision on the left when
                          - The block is in the same relative position
                          - We previously moved to the left
+                         - If we just move left, we have a collision
                          */
 
-                        truecondition = realx0>realx1
-                                && xcoordinate == x1
-                                && ycoordinate >= y1 && ycoordinate < realToRel(realy1+2*playersize);
-
-                        if (truecondition) {
-                            float newdx = 0;
-                            if (!player.isStanding())
-                                newdx = -player.getDx()/5;
-                            player.setDx(newdx);
-                            player.setX((xcoordinate+1)*blocksize);
-                            System.out.println("L");
+                        if (x0>x1 && xcoordinate == relx1 && ycoordinate*blocksize<y0+2*playersize && (1+ycoordinate)*blocksize>y0){
+                            System.out.println("Pureleft");
+                            pureleft = true;
+                        }
+                        if (x0>x1 && xcoordinate == relx1 && ycoordinate*blocksize<y1+2*playersize && (1+ycoordinate)*blocksize>y1){
+                            System.out.println("Left");
+                            left = true;
                         }
 
                         /*
@@ -228,22 +182,123 @@ public class Game {
                          - We previously moved to the right
                          */
 
-                        truecondition = realx0<realx1
-                                && xcoordinate == realToRel2(realx1+playersize)
-                                && ycoordinate >= y1 && ycoordinate < realToRel(realy1+2*playersize);
-
-                        if (truecondition) {
-                            float newdx = 0;
-                            if (!player.isStanding())
-                                newdx = -player.getDx()/5;
-                            player.setDx(newdx);
-                            player.setX((xcoordinate-1)*blocksize+(blocksize-playersize));
-                            System.out.println("R");
+                        if (x0<x1 && xcoordinate == realtoRel(x1+playersize) && ycoordinate*blocksize<y0+2*playersize && (1+ycoordinate)*blocksize>y0){
+                            System.out.println("Pureright");
+                            pureright = true;
                         }
+                        if (x0<x1 && xcoordinate == realtoRel(x1+playersize) && ycoordinate*blocksize<y1+2*playersize && (1+ycoordinate)*blocksize>y1){
+                            System.out.println("Right");
+                            right = true;
+                        }
+
+                        /*
+                        We have a  collision on the top when:
+                        - our basepoint is in the block or the block to the right
+                        - We moved up
+                         */
+
+                        if (y0>y1 && ycoordinate == rely1 && (xcoordinate+1)*blocksize >= x0 && xcoordinate*blocksize <= x0+playersize){
+                            System.out.println("Pureup");
+                            pureup = true;
+                        }
+                        if (y0>y1 && ycoordinate == rely1 && (xcoordinate+1)*blocksize >= x1 && xcoordinate*blocksize <= x1+playersize){
+                            System.out.println("Up");
+                            up = true;
+                        }
+
+                        /*
+                        We have a collision on the bottom when:
+                        - our lower bound is lower than the block
+                        - we moved down
+                         */
+
+                        if (y0<=y1
+                                && xcoordinate*blocksize<=x0+playersize && (xcoordinate+1) * blocksize>= x0
+                                && ycoordinate*blocksize<=y1+2*playersize && (ycoordinate+1)*blocksize>y1+playersize){
+                            System.out.println("Puredown");
+                            puredown = true;
+                        }
+
+
+
+                        if (y0<=y1
+                                && xcoordinate*blocksize<=x1+playersize && (xcoordinate+1)* blocksize>= x1
+                                && ycoordinate*blocksize<=y1+2*playersize
+                                && (ycoordinate+1)*blocksize>y1+2*playersize){
+                            System.out.println("Down");
+                            down = true;
+                        }
+                        System.out.println("________");
                     }
                 }
             }
         }
+        boolean collisiontrue= false;
+        if (left&&pureleft){
+            if (player.isStanding()){
+                player.setDx(0);
+                player.setX(relx0*blocksize);
+            } else{
+                player.setDx(abs(player.getDx()/2));
+            }
+            collisiontrue = true;
+        }
+        if (right&&pureright){
+            if (player.isStanding()){
+                player.setDx(0);
+                player.setX((relx1)*blocksize+blocksize-playersize);
+            } else{
+                player.setDx(abs(player.getDx()/2));
+            }
+            collisiontrue=true;
+        }
+        if (down&&puredown) {
+            if (!player.isStanding())
+                player.setY(rely0*blocksize+2*(blocksize-playersize));
+            player.setDy(0);
+            player.setStanding(true);
+            System.out.println("B");
+            collisiontrue = true;
+        } else
+            player.setStanding(false);
+        if (up&&pureup) {
+            player.setDy(abs(player.getC_mov().getDy()) / 2);
+            System.out.println("T");
+            collisiontrue=true;
+        }
+        if (!collisiontrue){
+            if (left){
+                if (player.isStanding()){
+                    player.setDx(0);
+                    player.setX(relx0*blocksize);
+                } else{
+                    player.setDx(abs(player.getDx()/2));
+                }
+            }
+            if (right){
+                if (player.isStanding()){
+                    player.setDx(0);
+                    player.setX((relx1-1)*blocksize-blocksize+playersize);
+                } else
+                    player.setDx(abs(player.getDx()/2));
+            }
+
+            if (down) {
+                if (!player.isStanding())
+                    player.setY(relx1*blocksize-2*playersize);
+                player.setDy(0);
+                player.setStanding(true);
+                System.out.println("B");
+            } else
+                player.setStanding(false);
+
+
+            if (up) {
+                player.setDy(abs(player.getC_mov().getDy()) / 2);
+                System.out.println("T");
+            }
+        }
+
     }
     private void enemyCollisions(int realx, int relx, int realy, int rely){
 
@@ -253,17 +308,13 @@ public class Game {
     private void jump(boolean standing){
         if (standing) {
             player.setDy(-25);
+            player.setStanding(false);
         }
-        else
-            player.setDy(player.getDy()+2);
     }
 
 
     //Helper functions
-    private int realToRel(float realcoordinate){
-        return (int) (realcoordinate/af.getGctx().getSize()+.5);
-    }
-    private int realToRel2(float realcoordinate){
+    private int realtoRel(float realcoordinate){
         return (int) (realcoordinate/af.getGctx().getSize());
     }
 
