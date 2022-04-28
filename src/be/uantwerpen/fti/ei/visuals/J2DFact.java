@@ -15,7 +15,6 @@ public class J2DFact extends AFact {
     public GraphicsCTX getGctx() {
         return gctx;
     }
-
     public J2DFact(){}
 
     @Override
@@ -34,7 +33,7 @@ public class J2DFact extends AFact {
             Map.Entry<Cmovement, Character> entry1 = new AbstractMap.SimpleEntry<Cmovement, Character>
                     (c_mov, type[it]);
             if (type[it]=='=') {
-                System.out.println(type[it]);
+                //System.out.println(type[it]);
                 c_mov.setDx(1);
                 c_mov.setDy(0);
                 enemyBounds(x0, d, enemyarr, it, entry1);

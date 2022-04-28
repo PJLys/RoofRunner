@@ -14,7 +14,7 @@ public class Game {
     private APlayer player;
     private Input input;
     private CollisionDetection cd;
-    private int score = 0;
+    private static int score = 0;
     private int cellsX = 25;
     private int cellsY = 15;
 
@@ -37,8 +37,6 @@ public class Game {
     ));
 
 
-
-
     public Game(AFact af){
         this.af = af;
     }
@@ -49,36 +47,41 @@ public class Game {
         build();
         while(running){
             // INPUT
-            if (input.inputAvailable()) {
-                Input.Inputs movement = input.getInput();
-                if (movement == Input.Inputs.SPACE) {
-                    paused = !paused;
-                    player.getC_mov().setDy(2);
+
+            boolean[] movement = input.getInput();
+            // space will pause the game
+            if (movement[0])
+                paused = !paused;
+            //horizontal
+            if (movement[1] && !movement[2]) {
+                player.setDx(-15);
+                player.setLookingRight(false);
+            }
+            else
+            {
+                if (movement[2]) {
+                    player.setDx(15);
+                    player.setLookingRight(true);
                 }
                 else {
-                    switch (movement) {
-                        case UP -> jump(player.isStanding());
-                        case LEFT -> player.getC_mov().setDx(-15);
-                        case RIGHT -> player.getC_mov().setDx(15);
-                        }
-                    }
+                    if (abs(player.getDx() * .6f) > .1)
+                        player.setDx(player.getDx() * .6f);
+                    else
+                        player.getC_mov().setDx(0);
                 }
-            else {
-                if (abs(player.getDx()*.6f)>.1)
-                    player.setDx(player.getDx()*.6f);
-                else
-                    player.getC_mov().setDx(0);
             }
+            if (movement[3])
+                jump(player.isStanding());
+
+
             int x0 = (int) player.getC_mov().getX();
             int y0 = (int) player.getC_mov().getY();
             // VISUALISATION
             if (!paused) {
-                player.setDy(player.getDy()+2);
+                player.setDy(min(player.getDy()+2,20));
                 int x1 = (int) player.getDx()+x0;
                 int y1 = (int) player.getDy()+y0;
                 cd.detectCollisions(x0, x1, y0, y1);
-                //if (jumpflag)
-                //    jump(player.isStanding());
                 player.update();
                 enemies.update();
                 obstacle.vis();
@@ -96,7 +99,6 @@ public class Game {
             }
         }
     }
-
     private void build(){
         this.input = af.createInput();
         this.obstacle = af.createObstacle(blocks);
@@ -107,7 +109,6 @@ public class Game {
     }
 
 
-
     //JUMP
     private void jump(boolean standing){
         if (standing) {
@@ -115,6 +116,9 @@ public class Game {
             player.setStanding(false);
         }
     }
-
+    public static void incScore(){
+        score++;
+        System.out.println("Score: "+score);
+    }
 
 }

@@ -8,6 +8,7 @@ import java.awt.*;
 public class J2DPlayer extends APlayer {
     private GraphicsCTX gctx;
     private Cmovement c_mov;
+    private boolean looking_right = true;
 
     @Override
     public void vis() {
@@ -47,6 +48,13 @@ public class J2DPlayer extends APlayer {
     public boolean isStanding() {
         return this.c_mov.isStanding();
     }
+    public boolean lookingRight() {
+        return false;
+    }
+    public void setLookingRight(boolean b) {
+        looking_right = b;
+    }
+
     public void setStanding(boolean b) {
         this.c_mov.setStanding(b);
     }

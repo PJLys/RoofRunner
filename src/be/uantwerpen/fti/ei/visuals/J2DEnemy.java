@@ -32,26 +32,26 @@ public class J2DEnemy extends AEnemy {
             Integer pos0 = enemy.getValue().getKey();
             Integer pos1 = enemy.getValue().getValue();
 
-            switch (type){
-                case ('=') :
+            switch (type) {
+                case ('=') -> {
                     //System.out.println(type);
                     cmovement.setDy(0);
-                    if (cmovement.getX()>pos1* gctx.getSize()){
+                    if (cmovement.getX() > pos1 * gctx.getSize()) {
                         cmovement.setDx(-1);
-                    } else if (cmovement.getX()<pos0* gctx.getSize()){
+                    } else if (cmovement.getX() < pos0 * gctx.getSize()) {
                         cmovement.setDx(1);
                     }
-                    break;
-                case ('|') :
-                    System.out.println(type);
+                }
+                case ('|') -> {
+                    //System.out.println(type);
                     cmovement.setDx(0);
-                    if (cmovement.getY()>pos1* gctx.getSize()){
+                    if (cmovement.getY() > pos1 * gctx.getSize()) {
                         cmovement.setDy(-1);
 
-                    } else if (cmovement.getY()<pos0* gctx.getSize()){
+                    } else if (cmovement.getY() < pos0 * gctx.getSize()) {
                         cmovement.setDy(1);
                     }
-                    break;
+                }
             }
 
             cmovement.update();

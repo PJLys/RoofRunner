@@ -38,6 +38,7 @@ public class CollisionDetection {
                         // if we have a hit, remove the corresponding block
                         if (ycoordinate == y1 || ycoordinate == y1 + 1 || ycoordinate == y1 + 2) {
                             ycoords.remove(ycoordinate);
+                            Game.incScore();
                             if (ycoords.isEmpty()){
                                 collectable.getPos().remove(xcoordinate);
                             }

@@ -7,39 +7,41 @@ import java.util.LinkedList;
 
 public class Input {
     public enum Inputs {LEFT, RIGHT, UP, SPACE};
-    private final LinkedList<Inputs> keyInputs;
+    private boolean key_event = false;
+    private final boolean[] inflags = new boolean[4];
 
     public Input(GraphicsCTX gctx) {
         gctx.getFrame().addKeyListener(new KeyInputAdapter());
-        keyInputs = new LinkedList<>();
     }
     public boolean inputAvailable(){
-        return keyInputs.size() > 0;
+        return key_event;
     }
-    public Inputs getInput() {
-        return keyInputs.poll();
+    public boolean[] getInput() {
+        return inflags;
     }
 
     class KeyInputAdapter extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
             int keyCode = e.getKeyCode();
+            key_event = true;
             switch (keyCode) {
-                case KeyEvent.VK_LEFT -> keyInputs.add(Inputs.LEFT);
-                case KeyEvent.VK_RIGHT -> keyInputs.add(Inputs.RIGHT);
-                case KeyEvent.VK_UP -> keyInputs.add(Inputs.UP);
-                case KeyEvent.VK_SPACE -> keyInputs.add(Inputs.SPACE);
+                case KeyEvent.VK_LEFT -> inflags[1] = true;
+                case KeyEvent.VK_RIGHT -> inflags[2] = true;
+                case KeyEvent.VK_UP -> inflags[3] = true;
+                case KeyEvent.VK_SPACE -> inflags[0] = !inflags[0];
             }
         }
 
         public void keyReleased(KeyEvent e){
+            key_event = true;
             int keyCode = e.getKeyCode();
-            if (keyCode!=KeyEvent.VK_LEFT)
-                keyInputs.remove(Inputs.LEFT);
-            if (keyCode!=KeyEvent.VK_UP)
-                keyInputs.remove(Inputs.UP);
-            if (keyCode!=KeyEvent.VK_RIGHT)
-                keyInputs.remove(Inputs.RIGHT);
+            if (keyCode==KeyEvent.VK_LEFT)
+                inflags[1] = false;
+            if (keyCode==KeyEvent.VK_UP)
+                inflags[3] = false;
+            if (keyCode==KeyEvent.VK_RIGHT)
+                inflags[2] = false;
         }
     }
 }
