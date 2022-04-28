@@ -10,6 +10,7 @@ public class Game {
     private final AFact af;
     private AObstacle obstacle;
     private ACollectable collectable;
+    private AEnemy enemies;
     private APlayer player;
     private Input input;
     private CollisionDetection cd;
@@ -34,6 +35,7 @@ public class Game {
     private final Map<Integer, LinkedList<Integer>> collectables = new HashMap<>(Map.of(
             2, new LinkedList<>(List.of(4, 5)), 5, new LinkedList<>(List.of(5))
     ));
+
 
 
 
@@ -71,15 +73,17 @@ public class Game {
             int y0 = (int) player.getC_mov().getY();
             // VISUALISATION
             if (!paused) {
-                player.setDy(player.getDy()+3);
+                player.setDy(player.getDy()+2);
                 int x1 = (int) player.getDx()+x0;
                 int y1 = (int) player.getDy()+y0;
                 cd.detectCollisions(x0, x1, y0, y1);
                 //if (jumpflag)
                 //    jump(player.isStanding());
                 player.update();
+                enemies.update();
                 obstacle.vis();
                 collectable.vis();
+                enemies.vis();
                 player.vis();
                 af.getGctx().render();
             }
@@ -92,10 +96,12 @@ public class Game {
             }
         }
     }
+
     private void build(){
         this.input = af.createInput();
         this.obstacle = af.createObstacle(blocks);
         this.collectable = af.createCollectable(collectables);
+        this.enemies = af.createEnemy(new int[] {5,7}, new int[] {8,6}, new int[] {4,2}, new char[] {'|', '='});
         this.player = af.createPlayer(54*3f,54*5f,5);
         this.cd = af.createCD(af,player,collectable,obstacle);
     }
@@ -110,10 +116,5 @@ public class Game {
         }
     }
 
-
-    //Helper functions
-    void updateScore(){
-        score++;
-    }
 
 }

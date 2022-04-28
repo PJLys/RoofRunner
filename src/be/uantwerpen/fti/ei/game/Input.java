@@ -31,5 +31,15 @@ public class Input {
                 case KeyEvent.VK_SPACE -> keyInputs.add(Inputs.SPACE);
             }
         }
+
+        public void keyReleased(KeyEvent e){
+            int keyCode = e.getKeyCode();
+            if (keyCode!=KeyEvent.VK_LEFT)
+                keyInputs.remove(Inputs.LEFT);
+            if (keyCode!=KeyEvent.VK_UP)
+                keyInputs.remove(Inputs.UP);
+            if (keyCode!=KeyEvent.VK_RIGHT)
+                keyInputs.remove(Inputs.RIGHT);
+        }
     }
 }
