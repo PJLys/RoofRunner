@@ -8,20 +8,24 @@ import static java.lang.Math.*;
 import static java.lang.Math.abs;
 
 public class CollisionDetection {
-    public CollisionDetection(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle){
+    public CollisionDetection(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle, AEnemy enemy){
         this.af = af;
         this.collectable = collectable;
         this.player=player;
         this.obstacle = obstacle;
+        this.enemy=enemy;
     }
 
     private final APlayer player;
     private final ACollectable collectable;
     private final AObstacle obstacle;
+    private final AEnemy enemy;
     private final AFact af;
 
     public void detectCollisions(float x0, float x1, float y0, float y1){
         int blocksize = af.getGctx().getSize();
+
+
         //Collision detection can start, for this I use separate functions to keep everything clean.
         collectableCollisions(realtoRel(x0, blocksize), realtoRel(x1, blocksize), realtoRel(y0,blocksize), realtoRel(y1,blocksize));
         obstacleCollisions(x0,x1,y0,y1);
@@ -70,14 +74,14 @@ public class CollisionDetection {
         int rely0 = realtoRel(y0,blocksize);
         int rely1 = realtoRel(y1,blocksize);
         // Is there an obstacle with this x coordinate?
-        for (int xcoordinate = min(relx1,relx0);
-             xcoordinate<=max(realtoRel(x1+playersize, blocksize), realtoRel(x0+playersize, blocksize));
-             xcoordinate++){
-            if (this.obstacle.getPos().containsKey(xcoordinate)) {
+        for (int ycoordinate = min(rely1,rely0);
+             ycoordinate<=max(realtoRel(y1+2*playersize, blocksize), realtoRel(y0+2*playersize, blocksize));
+             ycoordinate++){
+            if (this.obstacle.getPos().containsKey(ycoordinate)) {
                 // get the y_coordinates of every obstacle at x
-                ArrayList<Integer> y_coordinates = this.obstacle.getPos().get(xcoordinate);
-                if (y_coordinates != null) {
-                    for (int ycoordinate : y_coordinates) {
+                ArrayList<Integer> xcoordinates = this.obstacle.getPos().get(ycoordinate);
+                if (xcoordinates != null) {
+                    for (int xcoordinate : xcoordinates) {
 
                         /*
                         We have a collision on the left when
@@ -87,11 +91,11 @@ public class CollisionDetection {
                          */
 
                         if (x0>x1 && xcoordinate == relx1 && ycoordinate*blocksize<y0+2*playersize && (1+ycoordinate)*blocksize>y0){
-                            //System.out.println("Pureleft");
+                            System.out.println("Pureleft");
                             pureleft = true;
                         }
                         if (x0>x1 && xcoordinate == relx1 && ycoordinate*blocksize<y1+2*playersize && (1+ycoordinate)*blocksize>y1){
-                            //System.out.println("Left");
+                            System.out.println("Left");
                             left = true;
                         }
 
@@ -102,11 +106,11 @@ public class CollisionDetection {
                          */
 
                         if (x0<x1 && xcoordinate == realtoRel(x1+playersize,blocksize) && ycoordinate*blocksize<y0+2*playersize && (1+ycoordinate)*blocksize>y0){
-                            //System.out.println("Pureright");
+                            System.out.println("Pureright");
                             pureright = true;
                         }
                         if (x0<x1 && xcoordinate == realtoRel(x1+playersize,blocksize) && ycoordinate*blocksize<y1+2*playersize && (1+ycoordinate)*blocksize>y1){
-                            //System.out.println("Right");
+                            System.out.println("Right");
                             right = true;
                         }
 
@@ -117,11 +121,11 @@ public class CollisionDetection {
                          */
 
                         if (y0>y1 && ycoordinate == rely1 && (xcoordinate+1)*blocksize >= x0 && xcoordinate*blocksize <= x0+playersize){
-                            //System.out.println("Pureup");
+                            System.out.println("Pureup");
                             pureup = true;
                         }
                         if (y0>y1 && ycoordinate == rely1 && (xcoordinate+1)*blocksize >= x1 && xcoordinate*blocksize <= x1+playersize){
-                            //System.out.println("Up");
+                            System.out.println("Up");
                             up = true;
                         }
 

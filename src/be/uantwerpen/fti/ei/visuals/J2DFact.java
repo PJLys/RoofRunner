@@ -5,13 +5,7 @@ import be.uantwerpen.fti.ei.components.Cmovement;
 import be.uantwerpen.fti.ei.game.CollisionDetection;
 import be.uantwerpen.fti.ei.game.*;
 
-import javax.swing.*;
 import java.util.*;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
 
 public class J2DFact extends AFact {
     private final GraphicsCTX gctx = new GraphicsCTX();
@@ -63,8 +57,8 @@ public class J2DFact extends AFact {
     public Input createInput() {
         return new Input(gctx);
     }
-    public CollisionDetection createCD(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle) {
-        return new CollisionDetection(af, player, collectable, obstacle);
+    public CollisionDetection createCD(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle, AEnemy enemy) {
+        return new CollisionDetection(af, player, collectable, obstacle, enemy);
     }
 
     private static LinkedList<Cmovement> createMovables(int[] x, int[] y, int resolution) {

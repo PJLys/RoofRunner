@@ -31,8 +31,9 @@ public class Game {
         af.getGctx().setGameDimensions(cellsX, cellsY);
         running = true;
         paused = false;
-        build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build1.bd");
         input = af.createInput();
+        build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build1.bd");
+
         while(running){
             // INPUT
 
@@ -64,6 +65,7 @@ public class Game {
 
             int x0 = (int) player.getC_mov().getX();
             int y0 = (int) player.getC_mov().getY();
+
             // VISUALISATION
             if (!paused) {
                 player.setDy(min(player.getDy()+2,20));
@@ -175,8 +177,8 @@ public class Game {
             obstacle = af.createObstacle(obstaclepos);
             collectable = af.createCollectable(collectablepos);
             enemies = af.createEnemy(enemyx, enemyy, enemyd, enemyt);
-            player = af.createPlayer(2*af.getGctx().getSize(), 2*af.getGctx().getSize(), 5);
-            cd = af.createCD(af, player, collectable, obstacle);
+            player = af.createPlayer(4*af.getGctx().getSize(), 4*af.getGctx().getSize(), 5);
+            cd = af.createCD(af, player, collectable, obstacle, enemies);
 
 
         } catch (FileNotFoundException e) {
