@@ -17,16 +17,16 @@ public class J2DCollectable extends ACollectable {
     }
 
     @Override
-    public void vis() {
+    public void vis(int displacement) {
         Graphics2D g2d = getGctx().getG2d();
         int blocksize = getGctx().getSize();
         g2d.setColor(new Color(255,0,0));
         for (Map.Entry<Integer, LinkedList<Integer>> entry:getPos().entrySet()){
-            LinkedList<Integer> ys = entry.getValue();
-            for (int y : ys) {
+            LinkedList<Integer> xs = entry.getValue();
+            for (int x : xs) {
                 g2d.fillRect(
+                        x * blocksize-displacement,
                         entry.getKey() * blocksize,
-                        y * blocksize,
                         blocksize,
                         blocksize
                 );

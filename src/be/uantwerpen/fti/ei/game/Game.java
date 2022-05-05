@@ -21,8 +21,8 @@ public class Game {
     private Input input;
     private CollisionDetection cd;
     private static int score = 0;
-    private int cellsX = 25;
-    private int cellsY = 15;
+    private int cellsX = 20;
+    private int cellsY = 12;
 
     public Game(AFact af){
         this.af = af;
@@ -74,11 +74,13 @@ public class Game {
                 cd.detectCollisions(x0, x1, y0, y1);
                 player.update();
                 enemies.update();
-                obstacle.vis();
-                collectable.vis();
-                enemies.vis();
+                obstacle.vis(x1-3*af.getGctx().getSize());
+                collectable.vis(x1-3*af.getGctx().getSize());
+                enemies.vis(x1-3*af.getGctx().getSize());
                 player.vis();
                 af.getGctx().render();
+                if (y1>1000)
+                    running = !running;
             }
 
             // SLEEP
@@ -88,6 +90,7 @@ public class Game {
                 System.out.println(Arrays.toString(e.getStackTrace()));
             }
         }
+        System.exit(0);
     }
 
 

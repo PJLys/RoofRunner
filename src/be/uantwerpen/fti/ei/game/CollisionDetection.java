@@ -75,7 +75,7 @@ public class CollisionDetection {
         int rely1 = realtoRel(y1,blocksize);
         // Is there an obstacle with this x coordinate?
         for (int ycoordinate = min(rely1,rely0);
-             ycoordinate<=max(realtoRel(y1+2*playersize, blocksize), realtoRel(y0+2*playersize, blocksize));
+             ycoordinate<=max(realtoRel(x1+2*playersize, blocksize), realtoRel(y0+2*playersize, blocksize));
              ycoordinate++){
             if (this.obstacle.getPos().containsKey(ycoordinate)) {
                 // get the y_coordinates of every obstacle at x
@@ -138,7 +138,7 @@ public class CollisionDetection {
                         if (y0<=y1
                                 && xcoordinate*blocksize<=x0+playersize && (xcoordinate+1) * blocksize>= x0
                                 && ycoordinate*blocksize<=y1+2*playersize && (ycoordinate+1)*blocksize>y1+playersize){
-                            //System.out.println("Puredown");
+                            System.out.println("Puredown");
                             puredown = true;
                         }
 
@@ -148,7 +148,7 @@ public class CollisionDetection {
                                 && xcoordinate*blocksize<=x1+playersize && (xcoordinate+1)* blocksize>= x1
                                 && ycoordinate*blocksize<=y1+2*playersize
                                 && (ycoordinate+1)*blocksize>y1+2*playersize){
-                            //System.out.println("Down");
+                            System.out.println("Down");
                             down = true;
                         }
                         //System.out.println("________");

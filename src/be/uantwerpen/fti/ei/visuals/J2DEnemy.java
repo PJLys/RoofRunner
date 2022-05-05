@@ -58,14 +58,14 @@ public class J2DEnemy extends AEnemy {
 
         }
     }
-    public void vis() {
+    public void vis(int displacement) {
         Graphics2D g2d = gctx.getG2d();
         int blocksize = getGctx().getSize();
         g2d.setColor(new Color(247, 0, 255));
         for (var enemy : enemylist){
             Cmovement mov = enemy.getKey().getKey();
             g2d.fillRect(
-                    (int) mov.getX(),
+                    (int) mov.getX()-displacement,
                     (int) mov.getY(),
                     blocksize,
                     blocksize);

@@ -20,7 +20,7 @@ public class J2DObstacle extends AObstacle {
     }
 
     @Override
-    public void vis() {
+    public void vis(int displacement) {
         Graphics2D g2d = getGctx().getG2d();
         int blocksize = getGctx().getSize();
         g2d.setColor(new Color(0,0,255));
@@ -28,7 +28,7 @@ public class J2DObstacle extends AObstacle {
             ArrayList<Integer> xs = entry.getValue();
             for (int x : xs)
                 g2d.fillRect(
-                        x*blocksize,
+                        x*blocksize-displacement,
                         entry.getKey()*blocksize,
                         blocksize,
                         blocksize

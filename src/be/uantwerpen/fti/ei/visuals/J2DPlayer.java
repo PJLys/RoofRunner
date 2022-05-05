@@ -8,14 +8,18 @@ import java.awt.*;
 public class J2DPlayer extends APlayer {
     private GraphicsCTX gctx;
     private Cmovement c_mov;
-    private boolean looking_right = true;
+    private boolean looking_right;
 
     @Override
     public void vis() {
         Graphics2D g2d = gctx.getG2d();
         int playersize = (int) (gctx.getSize()*.8);
-        g2d.setColor(new Color(0,255,0));
-        g2d.fillRect((int) this.c_mov.getX(), (int) this.c_mov.getY(), playersize, 2*playersize);
+        if (isLookingRight())
+            g2d.setColor(new Color(0,255,0));
+        else {
+            g2d.setColor(new Color(0, 255, 200));
+        }
+        g2d.fillRect(4*54, (int) this.c_mov.getY(), playersize, 2*playersize);
     }
     public void setC_mov(Cmovement c_mov) {
         this.c_mov = c_mov;
@@ -48,8 +52,8 @@ public class J2DPlayer extends APlayer {
     public boolean isStanding() {
         return this.c_mov.isStanding();
     }
-    public boolean lookingRight() {
-        return false;
+    public boolean isLookingRight() {
+        return looking_right;
     }
     public void setLookingRight(boolean b) {
         looking_right = b;
