@@ -1,5 +1,11 @@
 package be.uantwerpen.fti.ei.game;
 
+import be.uantwerpen.fti.ei.visuals.J2DObstacle;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.*;
 
 import static java.lang.Math.*;
@@ -18,25 +24,6 @@ public class Game {
     private int cellsX = 25;
     private int cellsY = 15;
 
-
-    // TESTING if the draw function works
-    private final Map<Integer, int[]> blocks = new HashMap<>(Map.of(
-            1, new int[] {1, 2, 3, 4, 5, 7, 8, 9, 10},
-            2, new int[] {4,8},
-            3, new int[] {4,7,8},
-            4, new int[] {4,8},
-            5, new int[] {8},
-            6, new int[] {8},
-            7, new int[] {6,8},
-            8, new int[] {6,7},
-            9, new int[] {6,7}
-    ));
-
-    private final Map<Integer, LinkedList<Integer>> collectables = new HashMap<>(Map.of(
-            2, new LinkedList<>(List.of(4, 5)), 5, new LinkedList<>(List.of(5))
-    ));
-
-
     public Game(AFact af){
         this.af = af;
     }
@@ -44,7 +31,8 @@ public class Game {
         af.getGctx().setGameDimensions(cellsX, cellsY);
         running = true;
         paused = false;
-        build();
+        build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build1.bd");
+        input = af.createInput();
         while(running){
             // INPUT
 
@@ -99,14 +87,6 @@ public class Game {
             }
         }
     }
-    private void build(){
-        this.input = af.createInput();
-        this.obstacle = af.createObstacle(blocks);
-        this.collectable = af.createCollectable(collectables);
-        this.enemies = af.createEnemy(new int[] {5,7}, new int[] {8,6}, new int[] {4,2}, new char[] {'|', '='});
-        this.player = af.createPlayer(54*3f,54*5f,5);
-        this.cd = af.createCD(af,player,collectable,obstacle);
-    }
 
 
     //JUMP
@@ -119,6 +99,90 @@ public class Game {
     public static void incScore(){
         score++;
         System.out.println("Score: "+score);
+    }
+
+    //BUILD
+    public void build(String bdfile) {
+        try {
+            //Convert the fileaddress to a file
+            File buildfile = new File (bdfile);
+
+            //create a scanner for the file
+            Scanner read = new Scanner(buildfile);
+
+            //Initiate datatypes for the create() functions
+            //Enemy ==> create(x,y,d,t)
+            ArrayList<Integer> enemyx = new ArrayList<>();
+            ArrayList<Integer> enemyy = new ArrayList<>();
+            ArrayList<Integer> enemyd = new ArrayList<>();
+            ArrayList<Character> enemyt = new ArrayList<>();
+            //Obstacle ==> create(map(y,xs))
+            Map<Integer, ArrayList<Integer>> obstaclepos = new HashMap<>();
+            ArrayList<Integer> obstaclex;
+            //Collectable ==> create(map(y,ll(x)))
+            Map<Integer, LinkedList<Integer>> collectablepos = new HashMap<>();
+            LinkedList<Integer> collectablex;
+
+
+            //init y_coordinate to 0
+            int y_coordinate = 0;
+            //Iterate through every line of the file
+            while (read.hasNextLine()) {
+                String line = read.nextLine();
+
+                //Make an iterator for the line
+                CharacterIterator charit = new StringCharacterIterator(line);
+
+                //init x_coordinate to 0;
+                int x_coordinate = 0;
+
+                // reset x arrays
+                obstaclex = new ArrayList<>();
+                collectablex = new LinkedList<>();
+
+                while (charit.current() != CharacterIterator.DONE) {
+                    switch (charit.current()) {
+                        case ('X') -> {
+                            obstaclex.add(x_coordinate);
+                        }
+                        case ('|') -> {
+                            enemyx.add(x_coordinate);
+                            enemyy.add(y_coordinate);
+                            enemyt.add('|');
+                            enemyd.add(3);
+                        }
+                        case ('-') -> {
+                            enemyx.add(x_coordinate);
+                            enemyy.add(y_coordinate);
+                            enemyt.add('-');
+                            enemyd.add(3);
+                        }
+                        case ('C') -> {
+                            collectablex.add(x_coordinate);
+                        }
+                        default -> System.out.println("Unknown type: " + charit.current());
+                    }
+                    charit.next();
+                    x_coordinate++;
+                }
+                if (!obstaclex.isEmpty())
+                    obstaclepos.put(y_coordinate, obstaclex);
+                if (!collectablex.isEmpty())
+                    collectablepos.put(y_coordinate, collectablex);
+                y_coordinate++;
+            }
+
+            obstacle = af.createObstacle(obstaclepos);
+            collectable = af.createCollectable(collectablepos);
+            enemies = af.createEnemy(enemyx, enemyy, enemyd, enemyt);
+            player = af.createPlayer(2*af.getGctx().getSize(), 2*af.getGctx().getSize(), 5);
+            cd = af.createCD(af, player, collectable, obstacle);
+
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+            e.printStackTrace();
+        }
     }
 
 }

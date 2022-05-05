@@ -1,5 +1,6 @@
 package be.uantwerpen.fti.ei.game;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import static be.uantwerpen.fti.ei.game.Helperfunctions.realtoRel;
@@ -13,10 +14,12 @@ public class CollisionDetection {
         this.player=player;
         this.obstacle = obstacle;
     }
+
     private final APlayer player;
     private final ACollectable collectable;
     private final AObstacle obstacle;
     private final AFact af;
+
     public void detectCollisions(float x0, float x1, float y0, float y1){
         int blocksize = af.getGctx().getSize();
         //Collision detection can start, for this I use separate functions to keep everything clean.
@@ -72,7 +75,7 @@ public class CollisionDetection {
              xcoordinate++){
             if (this.obstacle.getPos().containsKey(xcoordinate)) {
                 // get the y_coordinates of every obstacle at x
-                int[] y_coordinates = this.obstacle.getPos().get(xcoordinate);
+                ArrayList<Integer> y_coordinates = this.obstacle.getPos().get(xcoordinate);
                 if (y_coordinates != null) {
                     for (int ycoordinate : y_coordinates) {
 
