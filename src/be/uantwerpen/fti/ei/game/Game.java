@@ -123,15 +123,17 @@ public class Game {
             ArrayList<Character> enemyt = new ArrayList<>();
             //Obstacle ==> create(map(y,xs))
             Map<Integer, ArrayList<Integer>> obstaclepos = new HashMap<>();
-            ArrayList<Integer> obstaclex;
+            ArrayList<Integer> obstacley = new ArrayList<>();
+            ArrayList<Integer> obstaclex = new ArrayList<>();
             //Collectable ==> create(map(y,ll(x)))
             Map<Integer, LinkedList<Integer>> collectablepos = new HashMap<>();
-            LinkedList<Integer> collectablex;
+            ArrayList<Integer> collectabley = new ArrayList<>();
+            ArrayList<Integer> collectablex = new ArrayList<>();
 
 
             //init y_coordinate to 0
             int y_coordinate = 0;
-            //Iterate through every line of the file
+            //Iterate through every line of the file and add to an array
             while (read.hasNextLine()) {
                 String line = read.nextLine();
 
@@ -141,14 +143,12 @@ public class Game {
                 //init x_coordinate to 0;
                 int x_coordinate = 0;
 
-                // reset x arrays
-                obstaclex = new ArrayList<>();
-                collectablex = new LinkedList<>();
 
                 while (charit.current() != CharacterIterator.DONE) {
                     switch (charit.current()) {
                         case ('X') -> {
                             obstaclex.add(x_coordinate);
+                            obstacley.add(y_coordinate);
                         }
                         case ('|') -> {
                             enemyx.add(x_coordinate);
@@ -164,17 +164,38 @@ public class Game {
                         }
                         case ('C') -> {
                             collectablex.add(x_coordinate);
+                            collectabley.add(y_coordinate);
                         }
                         default -> System.out.println("Unknown type: " + charit.current());
                     }
                     charit.next();
                     x_coordinate++;
-                }
-                if (!obstaclex.isEmpty())
-                    obstaclepos.put(y_coordinate, obstaclex);
-                if (!collectablex.isEmpty())
-                    collectablepos.put(y_coordinate, collectablex);
+                };
                 y_coordinate++;
+            }
+            //Resize the array to more functional datatypes for the objects
+            //OBSTACLES
+            for (int i=0; i<obstacley.size();i++){
+                Integer x_coord = obstaclex.get(i);
+                Integer y_coord = obstacley.get(i);
+                if (!obstaclepos.containsKey(x_coord)){
+                    ArrayList<Integer> newYlist = new ArrayList<>();
+                    newYlist.add(y_coord);
+                    obstaclepos.put(x_coord, newYlist);
+                } else{
+                    obstaclepos.get(x_coord).add(y_coord); //GEEFT MISSCHIEN FOUT
+                }
+            }
+            //COLLECTABLES
+            for (int i=0; i<collectabley.size(); i++){
+                Integer x_coord = collectablex.get(i);
+                Integer y_coord = collectabley.get(i);
+                if (!collectablepos.containsKey(x_coord)){
+                    LinkedList<Integer> ylist = new LinkedList<>();
+                    ylist.add(y_coord);
+                    collectablepos.put(x_coord, ylist);
+                } else
+                    collectablepos.get(x_coord).add(y_coord);
             }
 
             obstacle = af.createObstacle(obstaclepos);

@@ -74,14 +74,14 @@ public class CollisionDetection {
         int rely0 = realtoRel(y0,blocksize);
         int rely1 = realtoRel(y1,blocksize);
         // Is there an obstacle with this x coordinate?
-        for (int ycoordinate = min(rely1,rely0);
-             ycoordinate<=max(realtoRel(x1+2*playersize, blocksize), realtoRel(y0+2*playersize, blocksize));
-             ycoordinate++){
-            if (this.obstacle.getPos().containsKey(ycoordinate)) {
+        for (int xcoordinate = min(relx1,relx0);
+             xcoordinate<=max(realtoRel(x1+2*playersize, blocksize), realtoRel(x0+2*playersize, blocksize));
+             xcoordinate++){
+            if (this.obstacle.getPos().containsKey(xcoordinate)) {
                 // get the y_coordinates of every obstacle at x
-                ArrayList<Integer> xcoordinates = this.obstacle.getPos().get(ycoordinate);
-                if (xcoordinates != null) {
-                    for (int xcoordinate : xcoordinates) {
+                ArrayList<Integer> ycoordinates = this.obstacle.getPos().get(xcoordinate);
+                if (ycoordinates != null) {
+                    for (int ycoordinate : ycoordinates) {
 
                         /*
                         We have a collision on the left when
@@ -90,11 +90,11 @@ public class CollisionDetection {
                          - If we just move left, we have a collision
                          */
 
-                        if (x0>x1 && xcoordinate == relx1 && ycoordinate*blocksize<y0+2*playersize && (1+ycoordinate)*blocksize>y0){
+                        if (xcoordinate == relx1 && ycoordinate*blocksize<y0+2*playersize && (1+ycoordinate)*blocksize>y0){
                             System.out.println("Pureleft");
                             pureleft = true;
                         }
-                        if (x0>x1 && xcoordinate == relx1 && ycoordinate*blocksize<y1+2*playersize && (1+ycoordinate)*blocksize>y1){
+                        if (xcoordinate == relx1 && ycoordinate*blocksize<y1+2*playersize && (1+ycoordinate)*blocksize>y1){
                             System.out.println("Left");
                             left = true;
                         }
@@ -105,11 +105,11 @@ public class CollisionDetection {
                          - We previously moved to the right
                          */
 
-                        if (x0<x1 && xcoordinate == realtoRel(x1+playersize,blocksize) && ycoordinate*blocksize<y0+2*playersize && (1+ycoordinate)*blocksize>y0){
+                        if (xcoordinate == realtoRel(x1+playersize,blocksize) && ycoordinate*blocksize<y0+2*playersize && (1+ycoordinate)*blocksize>y0){
                             System.out.println("Pureright");
                             pureright = true;
                         }
-                        if (x0<x1 && xcoordinate == realtoRel(x1+playersize,blocksize) && ycoordinate*blocksize<y1+2*playersize && (1+ycoordinate)*blocksize>y1){
+                        if (xcoordinate == realtoRel(x1+playersize,blocksize) && ycoordinate*blocksize<y1+2*playersize && (1+ycoordinate)*blocksize>y1){
                             System.out.println("Right");
                             right = true;
                         }
@@ -120,11 +120,11 @@ public class CollisionDetection {
                         - We moved up
                          */
 
-                        if (y0>y1 && ycoordinate == rely1 && (xcoordinate+1)*blocksize >= x0 && xcoordinate*blocksize <= x0+playersize){
+                        if (ycoordinate == rely1 && (xcoordinate+1)*blocksize >= x0 && xcoordinate*blocksize <= x0+playersize){
                             System.out.println("Pureup");
                             pureup = true;
                         }
-                        if (y0>y1 && ycoordinate == rely1 && (xcoordinate+1)*blocksize >= x1 && xcoordinate*blocksize <= x1+playersize){
+                        if (ycoordinate == rely1 && (xcoordinate+1)*blocksize >= x1 && xcoordinate*blocksize <= x1+playersize){
                             System.out.println("Up");
                             up = true;
                         }
@@ -135,8 +135,7 @@ public class CollisionDetection {
                         - we moved down
                          */
 
-                        if (y0<=y1
-                                && xcoordinate*blocksize<=x0+playersize && (xcoordinate+1) * blocksize>= x0
+                        if (    xcoordinate*blocksize<=x0+playersize && (xcoordinate+1) * blocksize>= x0
                                 && ycoordinate*blocksize<=y1+2*playersize && (ycoordinate+1)*blocksize>y1+playersize){
                             System.out.println("Puredown");
                             puredown = true;
@@ -156,8 +155,9 @@ public class CollisionDetection {
                 }
             }
         }
+        
         boolean collisiontrue= false;
-        if (left&&pureleft){
+        if (pureleft){
             if (player.isStanding()){
                 player.setDx(0);
                 player.setX(relx0*blocksize);
@@ -166,7 +166,7 @@ public class CollisionDetection {
             }
             collisiontrue = true;
         }
-        if (right&&pureright){
+        if (pureright){
             if (player.isStanding()){
                 player.setDx(0);
                 player.setX((relx1)*blocksize+blocksize-playersize);
@@ -175,7 +175,7 @@ public class CollisionDetection {
             }
             collisiontrue=true;
         }
-        if (down&&puredown) {
+        if (puredown) {
             if (!player.isStanding())
                 player.setY(rely0*blocksize+2*(blocksize-playersize));
             player.setDy(0);
@@ -184,7 +184,7 @@ public class CollisionDetection {
             collisiontrue = true;
         } else
             player.setStanding(false);
-        if (up&&pureup) {
+        if (pureup) {
             player.setDy(abs(player.getC_mov().getDy()) / 2);
             //System.out.println("T");
             collisiontrue=true;

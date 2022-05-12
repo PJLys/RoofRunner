@@ -58,7 +58,6 @@ public class GraphicsCTX {
 
     public void setGameDimensions(int x_dim, int y_dim){
         size = Math.min(ScreenWidth/x_dim, ScreenHeight/y_dim);
-        System.out.println("size: "+size);
         frame.setLocation(50,50);
         frame.setSize(ScreenWidth, ScreenHeight);
         g2dimage = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
