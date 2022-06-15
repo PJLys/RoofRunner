@@ -74,9 +74,9 @@ public class Game {
                 cd.detectCollisions(x0, x1, y0, y1);
                 player.update();
                 enemies.update();
-                obstacle.vis(x1-3*af.getGctx().getSize());
-                collectable.vis(x1-3*af.getGctx().getSize());
-                enemies.vis(x1-3*af.getGctx().getSize());
+                obstacle.vis((int) player.getC_mov().getX()-4*af.getGctx().getSize());
+                collectable.vis((int) player.getC_mov().getX()-4*af.getGctx().getSize());
+                enemies.vis((int) player.getC_mov().getX()-4*af.getGctx().getSize());
                 player.vis();
                 af.getGctx().render();
                 if (y1>1000)

@@ -90,12 +90,17 @@ public class CollisionDetection {
                          - If we just move left, we have a collision
                          */
 
-                        if (xcoordinate == relx1 && ycoordinate*blocksize<y0+2*playersize && (1+ycoordinate)*blocksize>y0){
-                            System.out.println("Pureleft");
+                        if (xcoordinate == relx0 &&                         // if the left bound is in the column
+                                ycoordinate*blocksize<y0+2*playersize &&    // if the upperbound of the block is higher than the lowerbound of the player
+                                (1+ycoordinate)*blocksize-1>y0) {           // if the lowerbound of the block is lower than the upperbound of the player
                             pureleft = true;
+                            System.out.println("LEFT");
                         }
-                        if (xcoordinate == relx1 && ycoordinate*blocksize<y1+2*playersize && (1+ycoordinate)*blocksize>y1){
-                            System.out.println("Left");
+
+                        if (xcoordinate == relx1 &&
+                                ycoordinate*blocksize<y1+2*playersize &&
+                                (1+ycoordinate)*blocksize>y1) {
+                            //System.out.println("Left");
                             left = true;
                         }
 
@@ -105,12 +110,16 @@ public class CollisionDetection {
                          - We previously moved to the right
                          */
 
-                        if (xcoordinate == realtoRel(x1+playersize,blocksize) && ycoordinate*blocksize<y0+2*playersize && (1+ycoordinate)*blocksize>y0){
-                            System.out.println("Pureright");
+                        if (xcoordinate == realtoRel(x1+playersize,blocksize) &&
+                                ycoordinate*blocksize<y0+2*playersize &&
+                                (1+ycoordinate)*blocksize>y0) {
+                            System.out.println("RIGHT");
                             pureright = true;
                         }
-                        if (xcoordinate == realtoRel(x1+playersize,blocksize) && ycoordinate*blocksize<y1+2*playersize && (1+ycoordinate)*blocksize>y1){
-                            System.out.println("Right");
+                        if (xcoordinate == realtoRel(x1+playersize,blocksize) &&
+                                ycoordinate*blocksize<y1+2*playersize &&
+                                (1+ycoordinate)*blocksize>y1) {
+                            //System.out.println("Right");
                             right = true;
                         }
 
@@ -120,12 +129,16 @@ public class CollisionDetection {
                         - We moved up
                          */
 
-                        if (ycoordinate == rely1 && (xcoordinate+1)*blocksize >= x0 && xcoordinate*blocksize <= x0+playersize){
-                            System.out.println("Pureup");
+                        if (ycoordinate == rely1 &&
+                                (xcoordinate+1)*blocksize >= x0 &&
+                                xcoordinate*blocksize <= x0+playersize) {
+                            //System.out.println("Pureup");
                             pureup = true;
                         }
-                        if (ycoordinate == rely1 && (xcoordinate+1)*blocksize >= x1 && xcoordinate*blocksize <= x1+playersize){
-                            System.out.println("Up");
+                        if (ycoordinate == rely1 &&
+                                (xcoordinate+1)*blocksize >= x1 &&
+                                xcoordinate*blocksize <= x1+playersize) {
+                            //System.out.println("Up");
                             up = true;
                         }
 
@@ -137,17 +150,17 @@ public class CollisionDetection {
 
                         if (    xcoordinate*blocksize<=x0+playersize && (xcoordinate+1) * blocksize>= x0
                                 && ycoordinate*blocksize<=y1+2*playersize && (ycoordinate+1)*blocksize>y1+playersize){
-                            System.out.println("Puredown");
+                            //System.out.println("Puredown");
                             puredown = true;
                         }
 
 
 
-                        if (y0<=y1
-                                && xcoordinate*blocksize<=x1+playersize && (xcoordinate+1)* blocksize>= x1
+                        if (
+                                 xcoordinate*blocksize<=x1+playersize && (xcoordinate+1)* blocksize>= x1
                                 && ycoordinate*blocksize<=y1+2*playersize
                                 && (ycoordinate+1)*blocksize>y1+2*playersize){
-                            System.out.println("Down");
+                            //System.out.println("Down");
                             down = true;
                         }
                         //System.out.println("________");
@@ -157,25 +170,28 @@ public class CollisionDetection {
         }
         
         boolean collisiontrue= false;
-        if (pureleft){
+
+        if (pureleft && left){
             if (player.isStanding()){
                 player.setDx(0);
-                player.setX(relx0*blocksize);
             } else{
                 player.setDx(abs(player.getDx()/2));
             }
+            player.setX((relx1+1)*blocksize);
             collisiontrue = true;
         }
-        if (pureright){
+
+        if (pureright && right){
             if (player.isStanding()){
                 player.setDx(0);
-                player.setX((relx1)*blocksize+blocksize-playersize);
             } else{
                 player.setDx(abs(player.getDx()/2));
             }
+            player.setX((relx1+1)*blocksize-playersize);
             collisiontrue=true;
         }
-        if (puredown) {
+
+        if (puredown && down) {
             if (!player.isStanding())
                 player.setY(rely0*blocksize+2*(blocksize-playersize));
             player.setDy(0);
@@ -189,11 +205,12 @@ public class CollisionDetection {
             //System.out.println("T");
             collisiontrue=true;
         }
+
         if (!collisiontrue){
             if (left){
                 if (player.isStanding()){
                     player.setDx(0);
-                    player.setX(relx0*blocksize);
+                    player.setX((relx1)*blocksize);
                 } else{
                     player.setDx(abs(player.getDx()/2));
                 }

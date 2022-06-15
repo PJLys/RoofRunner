@@ -19,7 +19,7 @@ public class J2DPlayer extends APlayer {
         else {
             g2d.setColor(new Color(0, 255, 200));
         }
-        g2d.fillRect(4*54, (int) this.c_mov.getY(), playersize, 2*playersize);
+        g2d.fillRect(4*gctx.getSize(), (int) this.c_mov.getY(), playersize, 2*playersize);
     }
     public void setC_mov(Cmovement c_mov) {
         this.c_mov = c_mov;
