@@ -23,6 +23,8 @@ public class Game {
     private static int score = 0;
     private int cellsX = 20;
     private int cellsY = 12;
+    private float framerate = 50;
+
 
     public Game(AFact af){
         this.af = af;
@@ -32,7 +34,7 @@ public class Game {
         running = true;
         paused = false;
         input = af.createInput();
-        build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build1.bd");
+        build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build1.bd", framerate);
 
         while(running){
             // INPUT
@@ -43,13 +45,13 @@ public class Game {
                 paused = !paused;
             //horizontal
             if (movement[1] && !movement[2]) {
-                player.setDx(-15);
+                player.setDx(-750/framerate);
                 player.setLookingRight(false);
             }
             else
             {
                 if (movement[2]) {
-                    player.setDx(15);
+                    player.setDx(750/framerate);
                     player.setLookingRight(true);
                 }
                 else {
@@ -79,13 +81,15 @@ public class Game {
                 enemies.vis((int) player.getC_mov().getX()-4*af.getGctx().getSize());
                 player.vis();
                 af.getGctx().render();
-                if (y1>1000)
+                if (y1>1000) {
+                    System.out.println(y1);
                     running = !running;
+                }
             }
 
             // SLEEP
             try{
-                Thread.sleep(20);
+                Thread.sleep((long) (1000/framerate));
             } catch (InterruptedException e){
                 System.out.println(Arrays.toString(e.getStackTrace()));
             }
@@ -107,7 +111,7 @@ public class Game {
     }
 
     //BUILD
-    public void build(String bdfile) {
+    public void build(String bdfile, float framerate) {
         try {
             //Convert the fileaddress to a file
             File buildfile = new File (bdfile);
@@ -200,7 +204,7 @@ public class Game {
 
             obstacle = af.createObstacle(obstaclepos);
             collectable = af.createCollectable(collectablepos);
-            enemies = af.createEnemy(enemyx, enemyy, enemyd, enemyt);
+            enemies = af.createEnemy(enemyx, enemyy, enemyd, enemyt, framerate);
             player = af.createPlayer(4*af.getGctx().getSize(), 4*af.getGctx().getSize(), 5);
             cd = af.createCD(af, player, collectable, obstacle, enemies);
 

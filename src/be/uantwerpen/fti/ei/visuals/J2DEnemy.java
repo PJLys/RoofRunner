@@ -12,15 +12,17 @@ import java.util.Map;
 
 public class J2DEnemy extends AEnemy {
     private GraphicsCTX gctx;
+    private float framerate;
     private LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> enemylist;
 
 
     public GraphicsCTX getGctx() {
         return gctx;
     }
-    public J2DEnemy(LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> enemylist, GraphicsCTX gctx){
+    public J2DEnemy(LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> enemylist, GraphicsCTX gctx, float framerate){
         this.enemylist = enemylist;
         this.gctx = gctx;
+        this.framerate = framerate;
     }
 
     @Override
@@ -37,19 +39,19 @@ public class J2DEnemy extends AEnemy {
                     //System.out.println(type);
                     cmovement.setDy(0);
                     if (cmovement.getX() > pos1 * gctx.getSize()) {
-                        cmovement.setDx(-1);
+                        cmovement.setDx(-50/framerate);
                     } else if (cmovement.getX() < pos0 * gctx.getSize()) {
-                        cmovement.setDx(1);
+                        cmovement.setDx(50/framerate);
                     }
                 }
                 case ('|') -> {
                     //System.out.println(type);
                     cmovement.setDx(0);
                     if (cmovement.getY() > pos1 * gctx.getSize()) {
-                        cmovement.setDy(-1);
+                        cmovement.setDy(-50/framerate);
 
                     } else if (cmovement.getY() < pos0 * gctx.getSize()) {
-                        cmovement.setDy(1);
+                        cmovement.setDy(50/framerate);
                     }
                 }
             }

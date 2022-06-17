@@ -25,7 +25,7 @@ public class J2DFact extends AFact {
         player.setC_mov(new Cmovement(x, y));
         return player;
     }
-    public AEnemy createEnemy(ArrayList<Integer> x0, ArrayList<Integer> y0, ArrayList<Integer> d, ArrayList<Character> type) {
+    public AEnemy createEnemy(ArrayList<Integer> x0, ArrayList<Integer> y0, ArrayList<Integer> d, ArrayList<Character> type, float framerate) {
         LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> enemyarr =
                 new LinkedList<>();
         for (int it=0; it<x0.size(); it++){
@@ -46,7 +46,7 @@ public class J2DFact extends AFact {
             }
 
         }
-        return new J2DEnemy(enemyarr, gctx);
+        return new J2DEnemy(enemyarr, gctx, framerate);
     }
     public AObstacle createObstacle(Map<Integer, ArrayList<Integer>> pos) {
         return new J2DObstacle(pos, gctx);
