@@ -32,15 +32,17 @@ public class J2DBullet extends ABullet {
     @Override
     public void fire(int playerx, int playery, boolean direction, float framerate){
         int playersize = (int) (this.gctx.getSize()*.8);
-        if (direction) {
-            Cmovement cmov = new Cmovement(playerx+playersize, playery+playersize);
-            cmov.setDx(1000/framerate);
+        if (cmovList.size()<2) { //Max number of bullets to avoid rapidfire & concurrency exceptions
+            if (direction) {
+                Cmovement cmov = new Cmovement(playerx + playersize, playery + playersize);
+                cmov.setDx(1000 / framerate);
+                cmovList.add(cmov);
+                return;
+            }
+            Cmovement cmov = new Cmovement(playerx, playery + playersize);
+            cmov.setDx(-1000 / framerate);
             cmovList.add(cmov);
-            return;
         }
-        Cmovement cmov = new Cmovement(playerx, playery+playersize);
-        cmov.setDx(-1000/framerate);
-        cmovList.add(cmov);
     }
 
     @Override

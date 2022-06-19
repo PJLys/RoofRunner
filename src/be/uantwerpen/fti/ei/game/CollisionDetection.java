@@ -4,6 +4,7 @@ import be.uantwerpen.fti.ei.components.Cmovement;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Vector;
 
 import static be.uantwerpen.fti.ei.game.Helperfunctions.realtoRel;
 import static java.lang.Math.*;
@@ -46,6 +47,7 @@ public class CollisionDetection {
         collectableCollisions(realtoRel(x0, blocksize), realtoRel(x1, blocksize), realtoRel(y0,blocksize), realtoRel(y1,blocksize));
         obstacleCollisions(x0,x1,y0,y1);
         enemyCollisions(x1,y1);
+        bulletCollisions();
 
         //Adjusting positions for immutables
         positionUpdate(realtoRel(x1, blocksize), realtoRel(y1, blocksize));
@@ -229,15 +231,17 @@ public class CollisionDetection {
     }
     private void bulletCollisions(){
         LinkedList<Cmovement> cmovlist = bullet.getCmov();
-        for (Cmovement cmov:cmovlist){
+        for (Cmovement cmov:cmovlist) {
             float bulletx = cmov.getX();
             float bullety = cmov.getY();
             var obstacles = obstacle.getPos();
-            ArrayList<Integer> ycoords = obstacles.get(realtoRel(bulletx,blocksize));
-            for (int ycoord:ycoords){
-                if (ycoord==realtoRel(bullety,blocksize))
-                    cmovlist.remove(cmov);
-            }
+            try {
+                ArrayList<Integer> ycoords = obstacles.get(realtoRel(bulletx, blocksize));
+                for (int ycoord : ycoords) {
+                    if (ycoord == realtoRel(bullety, blocksize))
+                        cmovlist.remove(cmov);
+                }
+            } catch (NullPointerException ignored){}
         }
     }
 }
