@@ -42,7 +42,7 @@ public class CollisionDetection {
         blocksize = af.getGctx().getSize();
         playersize = player.getPlayerSize();
         //Initialize flags
-        resetFlags();
+        initFlags();
         //Actual collision detection
         collectableCollisions(realtoRel(x0, blocksize), realtoRel(x1, blocksize), realtoRel(y0,blocksize), realtoRel(y1,blocksize));
         obstacleCollisions(x0,x1,y0,y1);
@@ -156,7 +156,7 @@ public class CollisionDetection {
             }
         }
     }
-    private void resetFlags(){
+    private void initFlags(){
         down = false;
         puredown = false;
         up = false;
@@ -234,6 +234,7 @@ public class CollisionDetection {
         for (Cmovement cmov:cmovlist) {
             float bulletx = cmov.getX();
             float bullety = cmov.getY();
+            //Obstacle collisions
             var obstacles = obstacle.getPos();
             try {
                 ArrayList<Integer> ycoords = obstacles.get(realtoRel(bulletx, blocksize));
@@ -242,6 +243,17 @@ public class CollisionDetection {
                         cmovlist.remove(cmov);
                 }
             } catch (NullPointerException ignored){}
+
+            //Enemy Collisions
+            for (var enemyInstance:this.enemy.getEnemyList()){
+                float enemyx = enemyInstance.getKey().getKey().getX();
+                float enemyy = enemyInstance.getKey().getKey().getY();
+                if (bulletx>enemyx & bulletx<enemyx+blocksize &
+                bullety>enemyy & bullety<enemyy+blocksize){
+                    this.enemy.getEnemyList().remove(enemyInstance);
+                    cmovlist.remove(cmov);
+                }
+            }
         }
     }
 }
