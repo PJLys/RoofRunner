@@ -10,6 +10,5 @@ public abstract class ACollectable extends AEntity{
 
     @Override
     public abstract void vis(int displacement);
-
     public abstract Map<Integer, LinkedList<Integer>> getPos();
 }

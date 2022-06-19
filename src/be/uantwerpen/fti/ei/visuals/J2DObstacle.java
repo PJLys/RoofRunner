@@ -20,7 +20,7 @@ public class J2DObstacle extends AObstacle {
     }
 
     @Override
-    public void vis(int displacement) {
+    public void vis(int displacement){
         Graphics2D g2d = gctx.getG2d();
         int blocksize = gctx.getSize();
         g2d.setColor(new Color(255, 153, 0));

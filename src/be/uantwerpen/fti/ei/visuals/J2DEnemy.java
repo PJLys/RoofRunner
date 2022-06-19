@@ -73,5 +73,7 @@ public class J2DEnemy extends AEnemy {
                     blocksize);
         }
     }
-
+    public LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> getEnemyList(){
+        return this.enemylist;
+    }
 }

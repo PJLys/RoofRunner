@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.time.Instant;
+import java.time.Duration;
 import java.util.*;
 
 import static java.lang.Math.*;
@@ -35,10 +37,9 @@ public class Game {
         paused = false;
         input = af.createInput();
         build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build1.bd", framerate);
-
         while(running){
             // INPUT
-
+            Instant start = Instant.now();
             boolean[] movement = input.getInput();
             // space will pause the game
             if (movement[0])
@@ -55,7 +56,7 @@ public class Game {
                     player.setLookingRight(true);
                 }
                 else {
-                    if (abs(player.getDx() * .6f) > .1)
+                    if (abs(player.getDx() * .6f) > .1/framerate)
                         player.setDx(player.getDx() * .6f);
                     else
                         player.getC_mov().setDx(0);
@@ -70,13 +71,13 @@ public class Game {
 
             // VISUALISATION
             if (!paused) {
-                player.setDy(min(player.getDy()+2,20));
+                player.setDy(min(player.getDy()+12000/(framerate*framerate),1000/framerate)); //falling
                 int x1 = (int) player.getDx()+x0;
                 int y1 = (int) player.getDy()+y0;
                 cd.detectCollisions(x0, x1, y0, y1);
                 player.update();
                 enemies.update();
-                obstacle.vis((int) player.getC_mov().getX()-4*af.getGctx().getSize());
+                obstacle.vis((int) player.getC_mov().getX() - 4 * af.getGctx().getSize());
                 collectable.vis((int) player.getC_mov().getX()-4*af.getGctx().getSize());
                 enemies.vis((int) player.getC_mov().getX()-4*af.getGctx().getSize());
                 player.vis();
@@ -89,7 +90,23 @@ public class Game {
 
             // SLEEP
             try{
-                Thread.sleep((long) (1000/framerate));
+                Instant stop = Instant.now();
+                Duration time_elapsed = Duration.between(start,stop);
+                //if (!time_elapsed.isZero())
+                //    System.out.println("Time Elapsed: "+time_elapsed.toNanos());
+
+                double technicalsleep_ns = (1E9/framerate);
+                //System.out.println("Technical sleep (ns): "+technicalsleep_ns);
+                double realsleep_ns = technicalsleep_ns-time_elapsed.toNanos();
+                //System.out.println("Real sleep (ns): "+realsleep_ns);
+                long roundedsleep_ms = (long) (realsleep_ns*1E-6);
+                //System.out.println("Rounded sleep (ms): "+roundedsleep_ms);
+                int roundedsleep_ns = (int) (realsleep_ns-roundedsleep_ms*1E6);
+                //System.out.println("Rounded sleep (ns): "+roundedsleep_ns);
+
+
+                Thread.sleep(roundedsleep_ms, roundedsleep_ns);
+
             } catch (InterruptedException e){
                 System.out.println(Arrays.toString(e.getStackTrace()));
             }
@@ -101,7 +118,7 @@ public class Game {
     //JUMP
     private void jump(boolean standing){
         if (standing) {
-            player.setDy(-25);
+            player.setDy(-20*100/framerate); //vertical accelleration
             player.setStanding(false);
         }
     }
