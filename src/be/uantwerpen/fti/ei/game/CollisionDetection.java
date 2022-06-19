@@ -10,28 +10,45 @@ import static java.lang.Math.*;
 import static java.lang.Math.abs;
 
 public class CollisionDetection {
-    public CollisionDetection(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle, AEnemy enemy){
+    public CollisionDetection(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle, AEnemy enemy, ABullet bullet){
         this.af = af;
         this.collectable = collectable;
         this.player=player;
         this.obstacle = obstacle;
         this.enemy=enemy;
+        this.bullet=bullet;
     }
-
     private final APlayer player;
     private final ACollectable collectable;
     private final AObstacle obstacle;
     private final AEnemy enemy;
     private final AFact af;
+    private final ABullet bullet;
+    // Collision Flags
+    private boolean pureleft;
+    private boolean left;
+    private boolean pureright;
+    private boolean right;
+    private boolean pureup;
+    private boolean up;
+    private boolean puredown;
+    private boolean down;
+    // Const
+    private int blocksize;
+    private int playersize;
 
     public void detectCollisions(float x0, float x1, float y0, float y1){
-        int blocksize = af.getGctx().getSize();
-
-
-        //Collision detection can start, for this I use separate functions to keep everything clean.
+        blocksize = af.getGctx().getSize();
+        playersize = player.getPlayerSize();
+        //Initialize flags
+        resetFlags();
+        //Actual collision detection
         collectableCollisions(realtoRel(x0, blocksize), realtoRel(x1, blocksize), realtoRel(y0,blocksize), realtoRel(y1,blocksize));
         obstacleCollisions(x0,x1,y0,y1);
-        //enemyCollisions(x_coordinate, relx, y_coordinate, rely);
+        enemyCollisions(x1,y1);
+
+        //Adjusting positions for immutables
+        positionUpdate(realtoRel(x1, blocksize), realtoRel(y1, blocksize));
     }
     private void collectableCollisions(int x0, int x1, int y0, int y1){
         // The collectablecollision has to delete a collectable and update the score.
@@ -59,21 +76,8 @@ public class CollisionDetection {
 
     }
     private void obstacleCollisions(float x0, float x1, float y0, float y1){
-        int blocksize = af.getGctx().getSize();
-        int playersize = player.getPlayerSize();
-
-        boolean pureleft = false;
-        boolean left = false;
-        boolean pureright = false;
-        boolean right = false;
-        boolean pureup = false;
-        boolean up = false;
-        boolean puredown = false;
-        boolean down = false;
-
         int relx0 = realtoRel(x0,blocksize);
         int relx1 = realtoRel(x1,blocksize);
-        int rely0 = realtoRel(y0,blocksize);
         int rely1 = realtoRel(y1,blocksize);
         // Is there an obstacle with this x coordinate?
         for (int xcoordinate = min(relx1,relx0);
@@ -136,7 +140,31 @@ public class CollisionDetection {
                 }
             }
         }
-        
+    }
+    private void enemyCollisions(float realx, float realy){
+        for (var enemyInstance:this.enemy.getEnemyList()){
+            int blocksize = af.getGctx().getSize();
+            int playersize = player.getPlayerSize();
+            Cmovement movementcomponent = enemyInstance.getKey().getKey();
+            float enemyx = movementcomponent.getX();
+            float enemyy = movementcomponent.getY();
+            if (realx<enemyx+blocksize && realx+playersize > enemyx &&
+                    realy < enemyy+blocksize && realy+2*playersize > enemyy){
+                System.out.println("Enemy Collision!");
+            }
+        }
+    }
+    private void resetFlags(){
+        down = false;
+        puredown = false;
+        up = false;
+        pureup = false;
+        right = false;
+        pureright = false;
+        left = false;
+        pureleft = false;
+    }
+    private void positionUpdate(int relx1, int rely1){
         boolean collisiontrue= false;
         int newy = rely1 * blocksize + 2 * (blocksize - playersize);
 
@@ -145,13 +173,11 @@ public class CollisionDetection {
             player.setX((relx1+1)*blocksize);
             collisiontrue = true;
         }
-
         if (pureright && right){
             player.setDx(0);
             player.setX((relx1+1)*blocksize-playersize);
             collisiontrue=true;
         }
-
         if (puredown && down) {
             if (!player.isStanding()) {
                 player.setY(newy);
@@ -161,14 +187,12 @@ public class CollisionDetection {
             collisiontrue = true;
         } else
             player.setStanding(false);
-
         if (pureup && up) {
             player.setDy(0);
             if (!player.isStanding())
                 player.setY((rely1+1)*blocksize);
             collisiontrue=true;
         }
-
         if (!collisiontrue){
             if (left){
                 if (player.isStanding()){
@@ -202,18 +226,17 @@ public class CollisionDetection {
                     player.setY((rely1+1)*blocksize);
             }
         }
-
     }
-    private void enemyCollisions(int realx, int relx, int realy, int rely){
-        for (var enemyInstance:this.enemy.getEnemyList()){
-            int blocksize = af.getGctx().getSize();
-            int playersize = player.getPlayerSize();
-            Cmovement movementcomponent = enemyInstance.getKey().getKey();
-            float enemyx = movementcomponent.getX();
-            float enemyy = movementcomponent.getY();
-            if (realx<enemyx+blocksize && realx+playersize > enemyx &&
-                    realy < enemyy+blocksize && realy+2*playersize > enemyy){
-                System.out.println("Enemy Collision!");
+    private void bulletCollisions(){
+        LinkedList<Cmovement> cmovlist = bullet.getCmov();
+        for (Cmovement cmov:cmovlist){
+            float bulletx = cmov.getX();
+            float bullety = cmov.getY();
+            var obstacles = obstacle.getPos();
+            ArrayList<Integer> ycoords = obstacles.get(realtoRel(bulletx,blocksize));
+            for (int ycoord:ycoords){
+                if (ycoord==realtoRel(bullety,blocksize))
+                    cmovlist.remove(cmov);
             }
         }
     }

@@ -7,7 +7,10 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class J2DCollectable extends ACollectable {
-
+    /***
+     * The collectable Data Type:
+     * Mapping between Map(X,Y[]) with Y being a linked list which performs better with deletion of elements.
+     */
     Map<Integer,LinkedList<Integer>> pos;
     GraphicsCTX gctx;
 
@@ -22,11 +25,11 @@ public class J2DCollectable extends ACollectable {
         int blocksize = getGctx().getSize();
         g2d.setColor(new Color(255,0,0));
         for (Map.Entry<Integer, LinkedList<Integer>> entry:getPos().entrySet()){
-            LinkedList<Integer> xs = entry.getValue();
-            for (int x : xs) {
+            LinkedList<Integer> ys = entry.getValue();
+            for (int y : ys) {
                 g2d.fillRect(
-                        x * blocksize-displacement,
-                        entry.getKey() * blocksize,
+                        (entry.getKey()*blocksize)-displacement,
+                        y * blocksize,
                         blocksize,
                         blocksize
                 );

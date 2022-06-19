@@ -12,7 +12,8 @@ public abstract class AFact {
     public abstract AEnemy createEnemy(ArrayList<Integer> x, ArrayList<Integer> y, ArrayList<Integer> d, ArrayList<Character> type, float framerate);
     public abstract AObstacle createObstacle(Map<Integer, ArrayList<Integer>> pos);
     public abstract ACollectable createCollectable(Map<Integer, LinkedList<Integer>> pos);
+    public abstract ABullet createBullet();
     public abstract Input createInput();
     public abstract GraphicsCTX getGctx();
-    public abstract CollisionDetection createCD(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle,AEnemy enemy);
+    public abstract CollisionDetection createCD(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle,AEnemy enemy, ABullet bullet);
 }

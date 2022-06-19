@@ -54,11 +54,14 @@ public class J2DFact extends AFact {
     public ACollectable createCollectable(Map<Integer, LinkedList<Integer>> pos) {
         return new J2DCollectable(pos, gctx);
     }
+    public ABullet createBullet(){
+        return new J2DBullet(gctx);
+    }
     public Input createInput() {
         return new Input(gctx);
     }
-    public CollisionDetection createCD(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle, AEnemy enemy) {
-        return new CollisionDetection(af, player, collectable, obstacle, enemy);
+    public CollisionDetection createCD(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle, AEnemy enemy, ABullet bullet) {
+        return new CollisionDetection(af, player, collectable, obstacle, enemy, bullet);
     }
 
     private static LinkedList<Cmovement> createMovables(int[] x, int[] y, int resolution) {

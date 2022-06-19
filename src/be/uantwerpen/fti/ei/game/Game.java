@@ -21,11 +21,13 @@ public class Game {
     private AEnemy enemies;
     private APlayer player;
     private Input input;
+    private ABullet bullet;
     private CollisionDetection cd;
     private static int score = 0;
     private int cellsX = 20;
     private int cellsY = 12;
     private float framerate = 50;
+    private boolean shoot_enable = true;
 
 
     public Game(AFact af){
@@ -62,25 +64,44 @@ public class Game {
                         player.getC_mov().setDx(0);
                 }
             }
+
             if (movement[3])
                 jump(player.isStanding());
 
+            if (movement[4] & shoot_enable){
+                shoot();
+                shoot_enable = false;
+            }
+
+            if (!movement[4]){
+                shoot_enable=true;
+            }
 
             int x0 = (int) player.getC_mov().getX();
             int y0 = (int) player.getC_mov().getY();
 
-            // VISUALISATION
+            // Game loop
             if (!paused) {
                 player.setDy(min(player.getDy()+12000/(framerate*framerate),1000/framerate)); //falling
                 int x1 = (int) player.getDx()+x0;
                 int y1 = (int) player.getDy()+y0;
                 cd.detectCollisions(x0, x1, y0, y1);
+
                 player.update();
                 enemies.update();
-                obstacle.vis((int) player.getC_mov().getX() - 4 * af.getGctx().getSize());
-                collectable.vis((int) player.getC_mov().getX()-4*af.getGctx().getSize());
-                enemies.vis((int) player.getC_mov().getX()-4*af.getGctx().getSize());
-                player.vis();
+                bullet.update();
+
+                int displacement = (int) player.getC_mov().getX() - 4 * af.getGctx().getSize();
+                try {
+                    obstacle.vis(displacement);
+                    collectable.vis(displacement);
+                    enemies.vis(displacement);
+                    bullet.vis(displacement);
+                    player.vis();
+                } catch (NullPointerException e){
+                    System.out.println(e.getMessage());
+                }
+
                 af.getGctx().render();
                 if (y1>1000) {
                     System.out.println(y1);
@@ -92,8 +113,6 @@ public class Game {
             try{
                 Instant stop = Instant.now();
                 Duration time_elapsed = Duration.between(start,stop);
-                //if (!time_elapsed.isZero())
-                //    System.out.println("Time Elapsed: "+time_elapsed.toNanos());
 
                 double technicalsleep_ns = (1E9/framerate);
                 //System.out.println("Technical sleep (ns): "+technicalsleep_ns);
@@ -105,7 +124,7 @@ public class Game {
                 //System.out.println("Rounded sleep (ns): "+roundedsleep_ns);
 
 
-                Thread.sleep(roundedsleep_ms, roundedsleep_ns);
+                Thread.sleep(max(roundedsleep_ms,0), max(roundedsleep_ns,0));
 
             } catch (InterruptedException e){
                 System.out.println(Arrays.toString(e.getStackTrace()));
@@ -115,7 +134,7 @@ public class Game {
     }
 
 
-    //JUMP
+    //GAME Specific functions
     private void jump(boolean standing){
         if (standing) {
             player.setDy(-20*100/framerate); //vertical accelleration
@@ -125,6 +144,12 @@ public class Game {
     public static void incScore(){
         score++;
         System.out.println("Score: "+score);
+    }
+    public void shoot(){
+        System.out.println("Pew!");
+        int playerx = (int) player.getC_mov().getX();
+        int playery = (int) player.getC_mov().getY();
+        bullet.fire(playerx,playery,player.isLookingRight(),framerate);
     }
 
     //BUILD
@@ -223,8 +248,8 @@ public class Game {
             collectable = af.createCollectable(collectablepos);
             enemies = af.createEnemy(enemyx, enemyy, enemyd, enemyt, framerate);
             player = af.createPlayer(4*af.getGctx().getSize(), 4*af.getGctx().getSize(), 5);
-            cd = af.createCD(af, player, collectable, obstacle, enemies);
-
+            bullet = af.createBullet();
+            cd = af.createCD(af, player, collectable, obstacle, enemies, bullet);
 
         } catch (FileNotFoundException e) {
             System.out.println("File not found");

@@ -8,7 +8,7 @@ import java.util.LinkedList;
 public class Input {
     public enum Inputs {LEFT, RIGHT, UP, SPACE};
     private boolean key_event = false;
-    private final boolean[] inflags = new boolean[4];
+    private final boolean[] inflags = new boolean[5];
 
     public Input(GraphicsCTX gctx) {
         gctx.getFrame().addKeyListener(new KeyInputAdapter());
@@ -25,11 +25,13 @@ public class Input {
         public void keyPressed(KeyEvent e) {
             int keyCode = e.getKeyCode();
             key_event = true;
+            inflags[4] = false;
             switch (keyCode) {
                 case KeyEvent.VK_LEFT -> inflags[1] = true;
                 case KeyEvent.VK_RIGHT -> inflags[2] = true;
                 case KeyEvent.VK_UP -> inflags[3] = true;
                 case KeyEvent.VK_SPACE -> inflags[0] = !inflags[0];
+                case KeyEvent.VK_F -> inflags[4] = true;
             }
         }
 
@@ -42,6 +44,8 @@ public class Input {
                 inflags[3] = false;
             if (keyCode==KeyEvent.VK_RIGHT)
                 inflags[2] = false;
+            if (keyCode==KeyEvent.VK_F)
+                inflags[4] = false;
         }
     }
 }
