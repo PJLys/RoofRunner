@@ -35,7 +35,7 @@ public class J2DEnemy extends AEnemy {
             Integer pos1 = enemy.getValue().getValue();
 
             switch (type) {
-                case ('=') -> {
+                case ('-') -> {
                     //System.out.println(type);
                     cmovement.setDy(0);
                     if (cmovement.getX() > pos1 * gctx.getSize()) {

@@ -233,6 +233,10 @@ public class CollisionDetection {
 
         if (enemycollision) {
             player.setDy(-3000 / framerate);
+            if (player.isLookingRight())
+                player.setDx(-5000 / framerate);
+            else
+                player.setDx(5000/framerate);
             player.decreaseLives();
         }
     }
@@ -259,8 +263,11 @@ public class CollisionDetection {
                 bullety>enemyy & bullety<enemyy+blocksize){
                     this.enemy.getEnemyList().remove(enemyInstance);
                     cmovlist.remove(cmov);
+                    Game.incScore();
                 }
             }
+
+
         }
     }
 }

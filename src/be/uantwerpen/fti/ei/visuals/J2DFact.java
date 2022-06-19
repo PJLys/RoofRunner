@@ -34,7 +34,7 @@ public class J2DFact extends AFact {
             //make the first entry
             Map.Entry<Cmovement, Character> entry1 = new AbstractMap.SimpleEntry<Cmovement, Character>
                     (c_mov, type.get(it));
-            if (type.get(it)=='=') {
+            if (type.get(it)=='-') {
                 //System.out.println(type[it]);
                 c_mov.setDx(1);
                 c_mov.setDy(0);
