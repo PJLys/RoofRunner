@@ -11,13 +11,14 @@ import static java.lang.Math.*;
 import static java.lang.Math.abs;
 
 public class CollisionDetection {
-    public CollisionDetection(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle, AEnemy enemy, ABullet bullet){
+    public CollisionDetection(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle, AEnemy enemy, ABullet bullet, float framerate){
         this.af = af;
         this.collectable = collectable;
         this.player=player;
         this.obstacle = obstacle;
         this.enemy=enemy;
         this.bullet=bullet;
+        this.framerate=framerate;
     }
     private final APlayer player;
     private final ACollectable collectable;
@@ -25,6 +26,7 @@ public class CollisionDetection {
     private final AEnemy enemy;
     private final AFact af;
     private final ABullet bullet;
+    private final float framerate;
     // Collision Flags
     private boolean pureleft;
     private boolean left;
@@ -34,6 +36,7 @@ public class CollisionDetection {
     private boolean up;
     private boolean puredown;
     private boolean down;
+    private boolean enemycollision;
     // Const
     private int blocksize;
     private int playersize;
@@ -95,7 +98,7 @@ public class CollisionDetection {
                                 ycoordinate*blocksize<y0+2*playersize &&
                                 (1+ycoordinate)*blocksize>y0) {
                             pureleft = true;
-                            System.out.println("Pureleft");
+                            //System.out.println("Pureleft");
                         }
 
                         if (xcoordinate == relx1 &&
@@ -108,7 +111,7 @@ public class CollisionDetection {
                                 ycoordinate*blocksize<y0+2*playersize &&
                                 (1+ycoordinate)*blocksize>y0) {
                             pureright = true;
-                            System.out.println("Pureright");
+                            //System.out.println("Pureright");
                         }
 
                         if (xcoordinate == realtoRel(x1+playersize-1,blocksize) &&
@@ -152,7 +155,7 @@ public class CollisionDetection {
             float enemyy = movementcomponent.getY();
             if (realx<enemyx+blocksize && realx+playersize > enemyx &&
                     realy < enemyy+blocksize && realy+2*playersize > enemyy){
-                System.out.println("Enemy Collision!");
+                enemycollision=true;
             }
         }
     }
@@ -165,11 +168,11 @@ public class CollisionDetection {
         pureright = false;
         left = false;
         pureleft = false;
+        enemycollision = false;
     }
     private void positionUpdate(int relx1, int rely1){
         boolean collisiontrue= false;
         int newy = rely1 * blocksize + 2 * (blocksize - playersize);
-
         if (pureleft && left){
             player.setDx(0);
             player.setX((relx1+1)*blocksize);
@@ -221,12 +224,16 @@ public class CollisionDetection {
             } else
                 player.setStanding(false);
 
-
             if (up) {
                 player.setDy(0);
                 if (!player.isStanding())
                     player.setY((rely1+1)*blocksize);
             }
+        }
+
+        if (enemycollision) {
+            player.setDy(-3000 / framerate);
+            player.decreaseLives();
         }
     }
     private void bulletCollisions(){

@@ -60,8 +60,8 @@ public class J2DFact extends AFact {
     public Input createInput() {
         return new Input(gctx);
     }
-    public CollisionDetection createCD(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle, AEnemy enemy, ABullet bullet) {
-        return new CollisionDetection(af, player, collectable, obstacle, enemy, bullet);
+    public CollisionDetection createCD(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle, AEnemy enemy, ABullet bullet, float framerate) {
+        return new CollisionDetection(af, player, collectable, obstacle, enemy, bullet, framerate);
     }
 
     private static LinkedList<Cmovement> createMovables(int[] x, int[] y, int resolution) {

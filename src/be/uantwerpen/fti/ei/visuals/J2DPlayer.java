@@ -6,9 +6,11 @@ import be.uantwerpen.fti.ei.game.APlayer;
 import java.awt.*;
 
 public class J2DPlayer extends APlayer {
+
     private GraphicsCTX gctx;
     private Cmovement c_mov;
     private boolean looking_right;
+    private char lives;
 
     @Override
     public void vis() {
@@ -30,7 +32,13 @@ public class J2DPlayer extends APlayer {
     public void update() {
         c_mov.update();
     }
-
+    public void decreaseLives() {
+        this.lives--;
+        System.out.println("Lives: "+(int) lives);
+    }
+    public char getLives() {
+        return this.lives;
+    }
     public void setX(float newx){
         this.c_mov.setX(newx);
     }
@@ -58,7 +66,6 @@ public class J2DPlayer extends APlayer {
     public void setLookingRight(boolean b) {
         looking_right = b;
     }
-
     public void setStanding(boolean b) {
         this.c_mov.setStanding(b);
     }
@@ -74,6 +81,7 @@ public class J2DPlayer extends APlayer {
     }
     public J2DPlayer(GraphicsCTX gctx){
         this.gctx = gctx;
+        this.lives = 3;
     }
 
 }

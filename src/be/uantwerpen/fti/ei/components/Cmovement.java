@@ -25,8 +25,6 @@ public class Cmovement {
     }
     public void setY(float newy){
         this.y = newy;
-        System.out.println("Set Y: "+newy);
-
     }
     public void setDx(float dx){
         this.dx = dx;

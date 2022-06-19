@@ -107,6 +107,9 @@ public class Game {
                     System.out.println(y1);
                     running = !running;
                 }
+
+                if (player.getLives()==0)
+                    running = false;
             }
 
             // SLEEP
@@ -212,6 +215,7 @@ public class Game {
                             collectablex.add(x_coordinate);
                             collectabley.add(y_coordinate);
                         }
+                        case ('.') -> {}
                         default -> System.out.println("Unknown type: " + charit.current());
                     }
                     charit.next();
@@ -249,7 +253,7 @@ public class Game {
             enemies = af.createEnemy(enemyx, enemyy, enemyd, enemyt, framerate);
             player = af.createPlayer(4*af.getGctx().getSize(), 4*af.getGctx().getSize(), 5);
             bullet = af.createBullet();
-            cd = af.createCD(af, player, collectable, obstacle, enemies, bullet);
+            cd = af.createCD(af, player, collectable, obstacle, enemies, bullet, framerate);
 
         } catch (FileNotFoundException e) {
             System.out.println("File not found");

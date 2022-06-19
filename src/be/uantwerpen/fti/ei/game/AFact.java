@@ -15,5 +15,5 @@ public abstract class AFact {
     public abstract ABullet createBullet();
     public abstract Input createInput();
     public abstract GraphicsCTX getGctx();
-    public abstract CollisionDetection createCD(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle,AEnemy enemy, ABullet bullet);
+    public abstract CollisionDetection createCD(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle, AEnemy enemy, ABullet bullet, float framerate);
 }

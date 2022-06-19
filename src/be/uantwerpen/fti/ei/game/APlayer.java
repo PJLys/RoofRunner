@@ -20,4 +20,6 @@ public abstract class APlayer {
     public abstract void setLookingRight(boolean b);
     public abstract void setStanding(boolean b);
     public abstract int getPlayerSize();
+    public abstract void decreaseLives();
+    public abstract char getLives();
 }
