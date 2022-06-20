@@ -3,6 +3,7 @@ package be.uantwerpen.fti.ei.game;
 import be.uantwerpen.fti.ei.components.Cmovement;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.Vector;
 
@@ -256,15 +257,23 @@ public class CollisionDetection {
             } catch (NullPointerException ignored){}
 
             //Enemy Collisions
-            for (var enemyInstance:this.enemy.getEnemyList()){
-                float enemyx = enemyInstance.getKey().getKey().getX();
-                float enemyy = enemyInstance.getKey().getKey().getY();
-                if (bulletx>enemyx & bulletx<enemyx+blocksize &
-                bullety>enemyy & bullety<enemyy+blocksize){
-                    this.enemy.getEnemyList().remove(enemyInstance);
-                    cmovlist.remove(cmov);
-                    Game.incScore();
+            //Geeft ConcurrentModificationException
+            //Oplossing: Probeer de code uit te voeren uitgezonderd Exception
+            //Resultaat: voor een bepaalde iteratie zal er geen collision detection uitgevoerd worden
+            //Werkt omdat: Bij de volgende iteratie deze wel zal werken.
+            try {
+                for (var enemyInstance : this.enemy.getEnemyList()) {
+                    float enemyx = enemyInstance.getKey().getKey().getX();
+                    float enemyy = enemyInstance.getKey().getKey().getY();
+                    if (bulletx > enemyx & bulletx < enemyx + blocksize &
+                            bullety > enemyy & bullety < enemyy + blocksize) {
+                        this.enemy.getEnemyList().remove(enemyInstance);
+                        cmovlist.remove(cmov);
+                        Game.incScore();
+                    }
                 }
+            } catch (ConcurrentModificationException e){
+                System.out.println(e);
             }
 
 
