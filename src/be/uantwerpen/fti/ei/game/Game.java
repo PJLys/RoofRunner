@@ -28,6 +28,7 @@ public class Game {
     private int cellsY = 12;
     private float framerate = 100;
     private boolean shoot_enable = true;
+    int lvl = 1;
 
 
     public Game(AFact af){
@@ -38,7 +39,7 @@ public class Game {
         running = true;
         paused = false;
         input = af.createInput();
-        build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build1.bd", framerate);
+        build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build"+lvl+".bd", framerate);
         while(running){
             // INPUT
             Instant start = Instant.now();
@@ -110,6 +111,11 @@ public class Game {
 
                 if (player.getLives()==0)
                     running = false;
+
+                if (player.getC_mov().getX()>7500){
+                    lvl++;
+                    build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build"+lvl+".bd", framerate);
+                }
             }
 
             // SLEEP
@@ -149,7 +155,7 @@ public class Game {
         System.out.println("Score: "+score);
     }
     public void shoot(){
-        System.out.println("Pew!");
+        System.out.println(player.getC_mov().getX());
         int playerx = (int) player.getC_mov().getX();
         int playery = (int) player.getC_mov().getY();
         bullet.fire(playerx,playery,player.isLookingRight(),framerate);
