@@ -3,6 +3,7 @@ package be.uantwerpen.fti.ei.visuals;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.awt.*;
+import java.io.IOException;
 
 public class GraphicsCTX {
     private final int ScreenWidth;
@@ -56,7 +57,7 @@ public class GraphicsCTX {
             g2d.clearRect(0,0,frame.getWidth(),frame.getHeight());
     }
 
-    public void setGameDimensions(int x_dim, int y_dim){
+    public void setGameDimensions(int x_dim, int y_dim) throws IOException {
         size = Math.min(ScreenWidth/x_dim, ScreenHeight/y_dim);
         frame.setLocation(50,50);
         frame.setSize(ScreenWidth, ScreenHeight);

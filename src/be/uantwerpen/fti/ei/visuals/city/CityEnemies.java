@@ -4,6 +4,7 @@ import be.uantwerpen.fti.ei.components.Cmovement;
 import be.uantwerpen.fti.ei.game.AEnemy;
 import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
+import java.awt.*;
 import java.util.AbstractMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -15,18 +16,22 @@ public class CityEnemies extends AEnemy {
      * @param displacement
      */
     private LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> enemylist;
-    private final GraphicsCTX gctx;
+    private final CityGCTX gctx;
     private final float framerate;
 
     public CityEnemies(LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> enemylist, GraphicsCTX gctx, float framerate){
         this.enemylist = enemylist;
-        this.gctx = gctx;
+        this.gctx = (CityGCTX) gctx;
         this.framerate = framerate;
     }
 
     @Override
     public void vis(int displacement) {
-
+        Graphics2D g2d = gctx.getG2d();
+        for (var enemy : enemylist){
+            Cmovement mov = enemy.getKey().getKey();
+            g2d.drawImage(gctx.enemy_image, (int) mov.getX()-displacement, (int) mov.getY(), null);
+        }
     }
     public void update() {
         for (var enemy:enemylist){

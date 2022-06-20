@@ -4,15 +4,22 @@ import be.uantwerpen.fti.ei.components.Cmovement;
 import be.uantwerpen.fti.ei.game.APlayer;
 import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
+import java.awt.*;
+
 public class CityPlayer extends APlayer {
-    private GraphicsCTX gctx;
+    private CityGCTX gctx;
     private Cmovement c_mov;
     private boolean lookingRight;
     private int lives;
 
     @Override
     public void vis() {
-
+        Graphics2D g2d = gctx.getG2d();
+        if (isLookingRight())
+            g2d.drawImage(gctx.player_image_right, 4*gctx.getSize(), (int) this.c_mov.getY(),null);
+        else {
+            g2d.drawImage(gctx.player_image_left, 4*gctx.getSize(), (int) this.c_mov.getY(),null);
+        }
     }
     public void setC_mov(Cmovement c_mov) {
         this.c_mov=c_mov;
@@ -73,7 +80,7 @@ public class CityPlayer extends APlayer {
         return this.gctx;
     }
     public CityPlayer(GraphicsCTX gctx){
-        this.gctx=gctx;
+        this.gctx= (CityGCTX) gctx;
         this.lives=3;
     }
 }

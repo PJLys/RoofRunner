@@ -2,6 +2,7 @@ package be.uantwerpen.fti.ei.game;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.time.Instant;
@@ -24,15 +25,15 @@ public class Game {
     private static int score = 0;
     private int cellsX = 20;
     private int cellsY = 12;
-    private float framerate = 60;
+    private float framerate = 100;
     private boolean shoot_enable = true;
-    int lvl = 1;
+    short lvl = 1;
 
 
     public Game(AFact af){
         this.af = af;
     }
-    public void run(){
+    public void run() throws IOException {
         af.getGctx().setGameDimensions(cellsX, cellsY);
         running = true;
         paused = false;

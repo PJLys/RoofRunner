@@ -4,6 +4,7 @@ import be.uantwerpen.fti.ei.components.Cmovement;
 import be.uantwerpen.fti.ei.game.ABullet;
 import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
+import java.awt.*;
 import java.util.LinkedList;
 
 public class CityBullets extends ABullet {
@@ -16,16 +17,23 @@ public class CityBullets extends ABullet {
      * @return
      */
     private LinkedList<Cmovement> cmovList;
-    private GraphicsCTX gctx;
+    private CityGCTX gctx;
 
     public CityBullets(GraphicsCTX gctx){
-        this.gctx = gctx;
+        this.gctx = (CityGCTX) gctx;
         this.cmovList = new LinkedList<Cmovement>();
     }
 
     @Override
     public void vis(int displacement) {
+        Graphics2D g2d = gctx.getG2d();
+        for (Cmovement cmov :cmovList){
+            if (cmov.getDx()>0)
+                g2d.drawImage(gctx.projectile_image_right, (int) cmov.getX()-displacement, (int) cmov.getY(),null);
+            else
+                g2d.drawImage(gctx.projectile_image_left, (int) cmov.getX()-displacement, (int) cmov.getY(),null);
 
+        }
     }
     public LinkedList<Cmovement> getCmov() {
         return this.cmovList;

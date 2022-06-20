@@ -4,6 +4,7 @@ import be.uantwerpen.fti.ei.components.Cmovement;
 import be.uantwerpen.fti.ei.game.*;
 import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
+import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -11,6 +12,9 @@ import java.util.Map;
 
 public class CityFact extends AFact {
     private final GraphicsCTX gctx = new CityGCTX();
+
+    public CityFact() throws IOException {
+    }
 
     private void enemyBounds(ArrayList<Integer> coord, ArrayList<Integer> d, LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer, Integer>>> enemyarr, int it, Map.Entry<Cmovement, Character> entry1) {
         Map.Entry<Integer,Integer> entry2 = new AbstractMap.SimpleEntry<Integer,Integer>(coord.get(it),coord.get(it)+d.get(it));
@@ -61,6 +65,6 @@ public class CityFact extends AFact {
         return this.gctx;
     }
     public CollisionDetection createCD(AFact af, APlayer player, ACollectable collectable, AObstacle obstacle, AEnemy enemy, ABullet bullet, float framerate) {
-        return null;
+        return new CollisionDetection(af, player, collectable, obstacle, enemy, bullet, framerate);
     }
 }
