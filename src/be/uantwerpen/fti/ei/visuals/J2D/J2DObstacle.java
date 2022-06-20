@@ -1,6 +1,7 @@
-package be.uantwerpen.fti.ei.visuals;
+package be.uantwerpen.fti.ei.visuals.J2D;
 
 import be.uantwerpen.fti.ei.game.AObstacle;
+import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
 import java.awt.*;
 import java.util.ArrayList;

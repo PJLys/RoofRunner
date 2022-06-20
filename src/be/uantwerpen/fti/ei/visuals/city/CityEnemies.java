@@ -1,34 +1,35 @@
-package be.uantwerpen.fti.ei.visuals;
+package be.uantwerpen.fti.ei.visuals.city;
 
 import be.uantwerpen.fti.ei.components.Cmovement;
 import be.uantwerpen.fti.ei.game.AEnemy;
+import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
-import java.awt.*;
 import java.util.AbstractMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-
-
-public class J2DEnemy extends AEnemy {
-    private GraphicsCTX gctx;
-    private float framerate;
+public class CityEnemies extends AEnemy {
+    /**
+     * AEnemy is a linked list of all the enemy positions types and movement distances
+     *
+     * @param displacement
+     */
     private LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> enemylist;
+    private final GraphicsCTX gctx;
+    private final float framerate;
 
-
-    public GraphicsCTX getGctx() {
-        return gctx;
-    }
-    public J2DEnemy(LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> enemylist, GraphicsCTX gctx, float framerate){
+    public CityEnemies(LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> enemylist, GraphicsCTX gctx, float framerate){
         this.enemylist = enemylist;
         this.gctx = gctx;
         this.framerate = framerate;
     }
 
     @Override
-    public void update(){
-        for (var enemy : enemylist) {
+    public void vis(int displacement) {
 
+    }
+    public void update() {
+        for (var enemy:enemylist){
             Character type = enemy.getKey().getValue();
             Cmovement cmovement = enemy.getKey().getKey();
             Integer pos0 = enemy.getValue().getKey();
@@ -57,23 +58,14 @@ public class J2DEnemy extends AEnemy {
             }
 
             cmovement.update();
-
         }
     }
-    public void vis(int displacement) {
-        Graphics2D g2d = gctx.getG2d();
-        int blocksize = getGctx().getSize();
-        g2d.setColor(new Color(247, 0, 255));
-        for (var enemy : enemylist){
-            Cmovement mov = enemy.getKey().getKey();
-            g2d.fillRect(
-                    (int) mov.getX()-displacement,
-                    (int) mov.getY(),
-                    blocksize,
-                    blocksize);
-        }
-    }
-    public LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> getEnemyList(){
+    public LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer, Integer>>> getEnemyList() {
         return this.enemylist;
     }
+
+    public GraphicsCTX getGctx() {
+        return this.gctx;
+    }
+
 }

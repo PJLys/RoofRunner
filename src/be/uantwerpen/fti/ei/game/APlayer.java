@@ -21,5 +21,6 @@ public abstract class APlayer {
     public abstract void setStanding(boolean b);
     public abstract int getPlayerSize();
     public abstract void decreaseLives();
-    public abstract char getLives();
+    public abstract int getLives();
+    public abstract void setLives(int lives);
 }

@@ -1,6 +1,7 @@
-package be.uantwerpen.fti.ei.visuals;
+package be.uantwerpen.fti.ei.visuals.J2D;
 
 import be.uantwerpen.fti.ei.game.ACollectable;
+import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -36,10 +37,11 @@ public class J2DCollectable extends ACollectable {
             }
         }
     }
-    public GraphicsCTX getGctx() {
-        return this.gctx;
-    }
     public Map<Integer, LinkedList<Integer>> getPos() {
         return this.pos;
+    }
+
+    public GraphicsCTX getGctx() {
+        return this.gctx;
     }
 }

@@ -1,6 +1,6 @@
 package be.uantwerpen.fti.ei;
 import be.uantwerpen.fti.ei.game.Game;
-import be.uantwerpen.fti.ei.visuals.J2DFact;
+import be.uantwerpen.fti.ei.visuals.J2D.J2DFact;
 
 public class Main {
 

@@ -1,7 +1,5 @@
 package be.uantwerpen.fti.ei.game;
 
-import be.uantwerpen.fti.ei.visuals.J2DObstacle;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.CharacterIterator;
@@ -226,7 +224,7 @@ public class Game {
                     }
                     charit.next();
                     x_coordinate++;
-                };
+                }
                 y_coordinate++;
             }
             //Resize the array to more functional datatypes for the objects

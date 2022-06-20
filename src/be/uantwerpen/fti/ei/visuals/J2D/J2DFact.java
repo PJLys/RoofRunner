@@ -1,9 +1,10 @@
-package be.uantwerpen.fti.ei.visuals;
+package be.uantwerpen.fti.ei.visuals.J2D;
 
 import be.uantwerpen.fti.ei.game.Input;
 import be.uantwerpen.fti.ei.components.Cmovement;
 import be.uantwerpen.fti.ei.game.CollisionDetection;
 import be.uantwerpen.fti.ei.game.*;
+import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
 import java.util.*;
 
@@ -23,6 +24,7 @@ public class J2DFact extends AFact {
     public APlayer createPlayer(float x, float y, int lives) {
         APlayer player = new J2DPlayer(gctx);
         player.setC_mov(new Cmovement(x, y));
+        player.setLives(lives);
         return player;
     }
     public AEnemy createEnemy(ArrayList<Integer> x0, ArrayList<Integer> y0, ArrayList<Integer> d, ArrayList<Character> type, float framerate) {

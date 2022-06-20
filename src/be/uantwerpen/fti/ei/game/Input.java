@@ -3,7 +3,6 @@ import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.LinkedList;
 
 public class Input {
     public enum Inputs {LEFT, RIGHT, UP, SPACE};

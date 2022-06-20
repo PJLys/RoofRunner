@@ -1,7 +1,8 @@
-package be.uantwerpen.fti.ei.visuals;
+package be.uantwerpen.fti.ei.visuals.J2D;
 
 import be.uantwerpen.fti.ei.components.Cmovement;
 import be.uantwerpen.fti.ei.game.ABullet;
+import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -23,13 +24,9 @@ public class J2DBullet extends ABullet {
             g2d.fillRect((int) cmov.getX()-displacement, (int)cmov.getY(),5,5);
         }
     }
-
-    @Override
     public LinkedList<Cmovement> getCmov() {
         return cmovList;
     }
-
-    @Override
     public void fire(int playerx, int playery, boolean direction, float framerate){
         int playersize = (int) (this.gctx.getSize()*.8);
         if (cmovList.size()<2) { //Max number of bullets to avoid rapidfire & concurrency exceptions
@@ -44,8 +41,6 @@ public class J2DBullet extends ABullet {
             cmovList.add(cmov);
         }
     }
-
-    @Override
     public void update(){
         for (Cmovement cmov:cmovList){
             cmov.update();
