@@ -24,7 +24,7 @@ public class Game {
     private static int score = 0;
     private int cellsX = 20;
     private int cellsY = 12;
-    private float framerate = 100;
+    private float framerate = 60;
     private boolean shoot_enable = true;
     int lvl = 1;
 

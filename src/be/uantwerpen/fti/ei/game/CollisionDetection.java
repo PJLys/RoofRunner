@@ -233,12 +233,8 @@ public class CollisionDetection {
         }
 
         if (enemycollision) {
-            player.setDy(-3000 / framerate);
-            if (player.isLookingRight())
-                player.setDx(-5000 / framerate);
-            else
-                player.setDx(5000/framerate);
-            player.decreaseLives();
+            player.setX(4*af.getGctx().getSize());
+            player.setY(4*af.getGctx().getSize());
         }
     }
     private void bulletCollisions(){
