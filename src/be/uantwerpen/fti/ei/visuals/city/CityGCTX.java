@@ -61,8 +61,11 @@ public class CityGCTX extends GraphicsCTX {
         Toolkit.getDefaultToolkit().sync();
         graph2D.drawImage(g2dimage, 0, 0, null);
         graph2D.dispose();
-        if (g2d != null)
-            g2d.clearRect(0,0,frame.getWidth(),frame.getHeight());
+        if (this.g2d != null) {
+            g.clearRect(0, 0, frame.getWidth(), frame.getHeight());
+            this.g2d.setColor(Color.black);
+            this.g2d.fillRect(0, 0, frame.getWidth(), frame.getHeight());
+        }
     }
     public void setGameDimensions(int x_dim, int y_dim) throws IOException {
         size = Math.min(ScreenWidth/x_dim, ScreenHeight/y_dim);
@@ -86,14 +89,12 @@ public class CityGCTX extends GraphicsCTX {
         projectile_image_left = ImageIO.read(new File("src\\be\\uantwerpen\\fti\\ei\\visuals\\city\\images\\playersprites\\Kunai_L.png"));
 
     }
-
     private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight){
         Image resultingImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_DEFAULT);
         BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_4BYTE_ABGR_PRE);
         outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
         return outputImage;
     }
-
     private void resizeAll(){
         obstacle_image = resizeImage(obstacle_image,size,size);
         player_image_right = resizeImage(player_image_right, (int) (size*.8), (int) (size*1.6));

@@ -7,7 +7,9 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.time.Instant;
 import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.*;
 
@@ -25,36 +27,55 @@ public class Game {
     private static int score = 0;
     private int cellsX = 20;
     private int cellsY = 12;
-    private float framerate = 100;
+    private int initial_framerate = 500;
+    private double framerate = initial_framerate;
     private boolean shoot_enable = true;
+    private Instant prev_instance;
     short lvl = 1;
+    private boolean newframe = false;
+    private Timer timer = new Timer();
+    private TimerTask task = new TimerTask() {
+        /**
+         * The action to be performed by this timer task.
+         */
+        @Override
+        public void run() {
+            newframe = true;
+        }
+    };
+
 
 
     public Game(AFact af){
         this.af = af;
     }
     public void run() throws IOException {
+        System.out.println("Timer period: "+ 1e3/initial_framerate);
+        timer.scheduleAtFixedRate(task, 0, (long) (1e3/framerate));
         af.getGctx().setGameDimensions(cellsX, cellsY);
         running = true;
         paused = false;
         input = af.createInput();
-        build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build"+lvl+".bd", framerate);
+        build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build"+lvl+".bd", initial_framerate);
+        prev_instance = Instant.now();
         while(running){
+            //System.out.println(Duration.between(prev_instance,Instant.now()).getSeconds());
             // INPUT
-            Instant start = Instant.now();
             boolean[] movement = input.getInput();
+            //prev_instance = Instant.now();
+
             // space will pause the game
             if (movement[0])
                 paused = !paused;
             //horizontal
             if (movement[1] && !movement[2]) {
-                player.setDx(-750/framerate);
+                player.setDx((float) (-700.0/framerate));
                 player.setLookingRight(false);
             }
             else
             {
                 if (movement[2]) {
-                    player.setDx(750/framerate);
+                    player.setDx((float) (700.0/framerate));
                     player.setLookingRight(true);
                 }
                 else {
@@ -81,16 +102,19 @@ public class Game {
             int y0 = (int) player.getC_mov().getY();
 
             // Game loop
-            if (!paused) {
-                player.setDy(min(player.getDy()+12000/(framerate*framerate),1000/framerate)); //falling
+            if (!paused && newframe) {
+                newframe = false;
+                player.setDy((float) min(player.getDy()+12000.0/(framerate*framerate),1000.0/framerate)); //falling
+
+                //System.out.println("CD");
                 int x1 = (int) player.getDx()+x0;
                 int y1 = (int) player.getDy()+y0;
                 cd.detectCollisions(x0, x1, y0, y1);
-
+                //System.out.println("UD");
                 player.update();
                 enemies.update();
                 bullet.update();
-
+                //System.out.println("Vis");
                 int displacement = (int) player.getC_mov().getX() - 4 * af.getGctx().getSize();
                 try {
                     obstacle.vis(displacement);
@@ -107,35 +131,12 @@ public class Game {
                     System.out.println(y1);
                     running = !running;
                 }
-
                 if (player.getLives()==0)
                     running = false;
-
                 if (player.getC_mov().getX()>7500){
-                    lvl++;
-                    build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build"+lvl+".bd", framerate);
+                    lvl = (short) (1+floorMod(lvl,3));
+                    build("src\\be\\uantwerpen\\fti\\ei\\buildfiles\\build"+lvl+".bd", (float) framerate);
                 }
-            }
-
-            // SLEEP
-            try{
-                Instant stop = Instant.now();
-                Duration time_elapsed = Duration.between(start,stop);
-
-                double technicalsleep_ns = (1E9/framerate);
-                //System.out.println("Technical sleep (ns): "+technicalsleep_ns);
-                double realsleep_ns = technicalsleep_ns-time_elapsed.toNanos();
-                //System.out.println("Real sleep (ns): "+realsleep_ns);
-                long roundedsleep_ms = (long) (realsleep_ns*1E-6);
-                //System.out.println("Rounded sleep (ms): "+roundedsleep_ms);
-                int roundedsleep_ns = (int) (realsleep_ns-roundedsleep_ms*1E6);
-                //System.out.println("Rounded sleep (ns): "+roundedsleep_ns);
-
-
-                Thread.sleep(max(roundedsleep_ms,0), max(roundedsleep_ns,0));
-
-            } catch (InterruptedException e){
-                System.out.println(Arrays.toString(e.getStackTrace()));
             }
         }
         System.exit(0);
@@ -145,7 +146,7 @@ public class Game {
     //GAME Specific functions
     private void jump(boolean standing){
         if (standing) {
-            player.setDy(-20*100/framerate); //vertical accelleration
+            player.setDy(((float)(-2000/framerate))); //vertical accelleration
             player.setStanding(false);
         }
     }
@@ -154,10 +155,9 @@ public class Game {
         System.out.println("Score: "+score);
     }
     public void shoot(){
-        System.out.println(player.getC_mov().getX());
         int playerx = (int) player.getC_mov().getX();
         int playery = (int) player.getC_mov().getY();
-        bullet.fire(playerx,playery,player.isLookingRight(),framerate);
+        bullet.fire(playerx,playery,player.isLookingRight(), (float) framerate);
     }
 
     //BUILD
