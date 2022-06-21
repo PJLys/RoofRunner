@@ -48,7 +48,7 @@ public class CollisionDetection {
         //Initialize flags
         initFlags();
         //Actual collision detection
-        collectableCollisions(realtoRel(x0, blocksize), realtoRel(x1, blocksize), realtoRel(y0,blocksize), realtoRel(y1,blocksize));
+        collectableCollisions(x1, y1);
         obstacleCollisions(x0,x1,y0,y1);
         enemyCollisions(x1,y1);
         bulletCollisions();
@@ -56,24 +56,22 @@ public class CollisionDetection {
         //Adjusting positions for immutables
         positionUpdate(realtoRel(x1, blocksize), realtoRel(y1, blocksize));
     }
-    private void collectableCollisions(int x0, int x1, int y0, int y1){
+    private void collectableCollisions(float x1, float y1){
         // The collectablecollision has to delete a collectable and update the score.
 
-        // if we moved a block
-        if (x0!=x1 || y0!=y1){
-            // check if there are any collectables at this or the following vertical line
-            for (Integer xcoordinate=x1; xcoordinate<=x1+1; xcoordinate++) {
-                if (this.collectable.getPos().containsKey(xcoordinate)) {
-                    LinkedList<Integer> ycoords = this.collectable.getPos().get(xcoordinate);
-                    // check if we hit any blocks with our head, body or feet
-                    for (Integer ycoordinate : ycoords) {
-                        // if we have a hit, remove the corresponding block
-                        if (ycoordinate == y1 || ycoordinate == y1 + 1 || ycoordinate == y1 + 2) {
-                            ycoords.remove(ycoordinate);
-                            Game.incScore();
-                            if (ycoords.isEmpty()){
-                                collectable.getPos().remove(xcoordinate);
-                            }
+        // check if there are any collectables at this or the following vertical line
+        for (Integer xcoordinate=realtoRel(x1,blocksize); xcoordinate<=realtoRel(x1,blocksize)+1; xcoordinate++) {
+            if (this.collectable.getPos().containsKey(xcoordinate)) {
+                LinkedList<Integer> ycoords = this.collectable.getPos().get(xcoordinate);
+                // check if we hit any blocks with our head, body or feet
+                for (Integer ycoordinate : ycoords) {
+                    // if we have a hit, remove the corresponding block
+                    if (x1<(xcoordinate+1)*blocksize  && x1+playersize>xcoordinate*blocksize &&
+                        y1+2*playersize>ycoordinate*blocksize && y1<(ycoordinate+1)*blocksize) {
+                        ycoords.remove(ycoordinate);
+                        Game.incScore();
+                        if (ycoords.isEmpty()){
+                            collectable.getPos().remove(xcoordinate);
                         }
                     }
                 }
