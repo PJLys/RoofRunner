@@ -1,6 +1,7 @@
 package be.uantwerpen.fti.ei.visuals.city;
 
 import be.uantwerpen.fti.ei.game.ACollectable;
+import be.uantwerpen.fti.ei.game.Helperfunctions;
 import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
 import java.awt.*;
@@ -25,13 +26,16 @@ public class CityCollectables extends ACollectable {
      */
     @Override
     public void vis(int displacement) {
+        int relative_displacement = Helperfunctions.realtoRel(displacement,gctx.getSize());
         Graphics2D g2d = getGctx().getG2d();
         int blocksize = getGctx().getSize();
-        for (Map.Entry<Integer, LinkedList<Integer>> entry:getPos().entrySet()){
-            LinkedList<Integer> ys = entry.getValue();
-            for (int y : ys) {
-                g2d.drawImage(gctx.collectable_image,(entry.getKey()*blocksize)-displacement,y * blocksize,null);
-            }
+        for (int x=relative_displacement;x<relative_displacement+22;x++){
+            try {
+                LinkedList<Integer> ys = pos.get(x);
+                for (int y : ys) {
+                    g2d.drawImage(gctx.collectable_image,(x*blocksize)-displacement,y * blocksize,null);
+                }
+            } catch (NullPointerException ignored){}
         }
     }
     public Map<Integer, LinkedList<Integer>> getPos() {

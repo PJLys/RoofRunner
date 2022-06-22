@@ -1,7 +1,9 @@
 package be.uantwerpen.fti.ei.visuals.city;
 
 import be.uantwerpen.fti.ei.game.AObstacle;
+import be.uantwerpen.fti.ei.game.Helperfunctions;
 import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
+import be.uantwerpen.fti.ei.game.Helperfunctions.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -27,11 +29,13 @@ public class CityObstacles extends AObstacle {
     public void vis(int displacement) {
         Graphics2D g2d = gctx.getG2d();
         int blocksize = gctx.getSize();
-        for (Map.Entry<Integer, ArrayList<Integer>> entry:getPos().entrySet()){
-            Integer x = entry.getKey();
-            ArrayList<Integer> ys = entry.getValue();
-            for (int y : ys)
-                g2d.drawImage(gctx.obstacle_image,x*blocksize-displacement, y*blocksize,null);
+        int relative_displacement= Helperfunctions.realtoRel(displacement,blocksize);
+        for (int x=relative_displacement;x<relative_displacement+22;x++){
+            try {
+                ArrayList<Integer> ys = this.pos.get(x);
+                for (int y : ys)
+                    g2d.drawImage(gctx.obstacle_image,x*blocksize-displacement, y*blocksize,null);
+            } catch (NullPointerException ignored){}
         }
 
     }
