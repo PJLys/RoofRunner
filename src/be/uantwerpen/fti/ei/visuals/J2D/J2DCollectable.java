@@ -7,8 +7,12 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.Map;
 
+
+/**
+ * Represents the collectable items as red squares in the game
+ */
 public class J2DCollectable extends ACollectable {
-    /***
+    /**
      * The collectable Data Type:
      * Mapping between Map(X,Y[]) with Y being a linked list which performs better with deletion of elements.
      */

@@ -10,10 +10,15 @@ import java.util.LinkedList;
 import java.util.Map;
 
 
-
+/**
+ * Represents the Enemies as coloured squares with a magenta colour
+ */
 public class J2DEnemy extends AEnemy {
     private final GraphicsCTX gctx;
     private final float framerate;
+    /**
+     * Enemy data is stored in a linked list which stores the movement component, enemy type, min position, max position
+     */
     private LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> enemylist;
 
 
@@ -26,6 +31,9 @@ public class J2DEnemy extends AEnemy {
         this.framerate = framerate;
     }
 
+    /**
+     * Updates the position of the enemies
+     */
     @Override
     public void update(){
         for (var enemy : enemylist) {
@@ -61,6 +69,11 @@ public class J2DEnemy extends AEnemy {
 
         }
     }
+
+    /**
+     * Displays the enemies as magenta squares depending on the position of the player
+     * @param displacement
+     */
     public void vis(int displacement) {
         Graphics2D g2d = gctx.getG2d();
         int blocksize = getGctx().getSize();

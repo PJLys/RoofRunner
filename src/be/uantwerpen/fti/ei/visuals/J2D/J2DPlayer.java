@@ -6,6 +6,9 @@ import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
 import java.awt.*;
 
+/**
+ * Visualizes the player using J2D fillrect()
+ */
 public class J2DPlayer extends APlayer {
 
     private GraphicsCTX gctx;
@@ -13,6 +16,11 @@ public class J2DPlayer extends APlayer {
     private boolean looking_right;
     private int lives;
 
+    /**
+     * Colour the player at a certain x position
+     *      - Lime when looking right
+     *      - Cyan when looking left
+     */
     @Override
     public void vis() {
         Graphics2D g2d = gctx.getG2d();

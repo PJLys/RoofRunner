@@ -5,6 +5,11 @@ import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * Prescribes the graphical context:
+ *      - Setting dimensions and blocksize
+ *      - Making a frame and a panel
+ */
 public class GraphicsCTX {
     private final int ScreenWidth;
     private final int ScreenHeight;
@@ -24,6 +29,9 @@ public class GraphicsCTX {
         return this.size;
     }
 
+    /**
+     * Initiate frame and panel
+     */
     public GraphicsCTX(){
         ScreenWidth = 1400;
         ScreenHeight = 810;
@@ -44,10 +52,17 @@ public class GraphicsCTX {
         frame.setVisible(true);
     }
 
+    /**
+     * Repaint the panel
+     */
     public void render() {
         panel.repaint();
     }
 
+    /**
+     * Draws the g2d image onto the graphics panel
+     * @param g
+     */
     private void doDrawing(Graphics g){
         Graphics2D graph2D = (Graphics2D) g;
         Toolkit.getDefaultToolkit().sync();
@@ -57,6 +72,13 @@ public class GraphicsCTX {
             g2d.clearRect(0,0,frame.getWidth(),frame.getHeight());
     }
 
+
+    /**
+     * Sets blocksize and background, creates a new Buffered Image
+     * @param x_dim
+     * @param y_dim
+     * @throws IOException
+     */
     public void setGameDimensions(int x_dim, int y_dim) throws IOException {
         size = Math.min(ScreenWidth/x_dim, ScreenHeight/y_dim);
         frame.setLocation(50,50);

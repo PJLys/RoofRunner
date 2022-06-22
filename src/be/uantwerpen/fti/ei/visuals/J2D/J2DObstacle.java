@@ -7,9 +7,15 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Visualizes the obstacles as orange blocks
+ */
 public class J2DObstacle extends AObstacle {
 
     private final GraphicsCTX gctx;
+    /**
+     * Blocks will be stored in a Mapping of an x coordinate with y array
+     */
     private final Map<Integer, ArrayList<Integer>> pos;
 
     public J2DObstacle(Map<Integer, ArrayList<Integer>> pos, GraphicsCTX gctx){
@@ -20,6 +26,10 @@ public class J2DObstacle extends AObstacle {
         return this.gctx;
     }
 
+    /**
+     * Iterate through the Map and colour the blocks in orange
+     * @param displacement
+     */
     @Override
     public void vis(int displacement){
         Graphics2D g2d = gctx.getG2d();

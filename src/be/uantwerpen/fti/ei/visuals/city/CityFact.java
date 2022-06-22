@@ -65,11 +65,11 @@ public class CityFact extends AFact {
                     (c_mov, type.get(it));
             if (type.get(it)=='-') {
                 //System.out.println(type[it]);
-                c_mov.setDx(1);
+                c_mov.setDx(50/framerate);
                 c_mov.setDy(0);
                 enemyBounds(x, d, enemyarr, it, entry1);
             } else if (type.get(it)=='|'){
-                c_mov.setDy(1);
+                c_mov.setDy(50/framerate);
                 c_mov.setDx(0);
                 enemyBounds(y, d, enemyarr, it, entry1);
             }
