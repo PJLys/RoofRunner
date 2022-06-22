@@ -45,10 +45,25 @@ public class Game {
     };
 
 
-
+    /**
+     * Game constructor, with only a factory as parameter
+     * @param af
+     */
     public Game(AFact af){
         this.af = af;
     }
+
+    /**
+     * Runs the game by creating timer interrupts for framerate and setting the dimensions
+     * Loops:
+     *      Input sequence -> set Dx and Dy
+     *      Gameloop:
+     *          Collision detection
+     *          Position update
+     *          Visualisation
+     *
+     * @throws IOException
+     */
     public void run() throws IOException {
         System.out.println("Timer period: "+ 1e3/initial_framerate);
         timer.scheduleAtFixedRate(task, 0, (long) (1e3/framerate));
@@ -69,13 +84,13 @@ public class Game {
                 paused = !paused;
             //horizontal
             if (movement[1] && !movement[2]) {
-                player.setDx((float) (-700.0/framerate));
+                player.setDx((float) (-500.0/framerate));
                 player.setLookingRight(false);
             }
             else
             {
                 if (movement[2]) {
-                    player.setDx((float) (700.0/framerate));
+                    player.setDx((float) (500.0/framerate));
                     player.setLookingRight(true);
                 }
                 else {
@@ -104,7 +119,7 @@ public class Game {
             // Game loop
             if (!paused && newframe) {
                 newframe = false;
-                player.setDy((float) min(player.getDy()+12000.0/(framerate*framerate),1000.0/framerate)); //falling
+                player.setDy((float) min(player.getDy()+10000.0/(framerate*framerate),800.0/framerate)); //falling
 
                 //System.out.println("CD");
                 int x1 = (int) player.getDx()+x0;
@@ -144,16 +159,30 @@ public class Game {
 
 
     //GAME Specific functions
+
+    /**
+     * Specific funtion that will be called when the jump key is pressed
+     * Jump when not standing
+     * @param standing
+     */
     private void jump(boolean standing){
         if (standing) {
             player.setDy(((float)(-2000/framerate))); //vertical accelleration
             player.setStanding(false);
         }
     }
+
+    /**
+     * Function that can be used by collision detection in order to increase the score
+     */
     public static void incScore(){
         score++;
         System.out.println("Score: "+score);
     }
+
+    /**
+     * Creates a bullet with a certain direction (max 2 at once)
+     */
     public void shoot(){
         int playerx = (int) player.getC_mov().getX();
         int playery = (int) player.getC_mov().getY();
@@ -161,6 +190,12 @@ public class Game {
     }
 
     //BUILD
+
+    /**
+     * Reads a file into arrays, change into more useful data types, create game objects
+     * @param bdfile
+     * @param framerate
+     */
     public void build(String bdfile, float framerate) {
         try {
             //Convert the fileaddress to a file

@@ -10,5 +10,10 @@ public abstract class ACollectable extends AEntity{
 
     @Override
     public abstract void vis(int displacement);
+
+    /**
+     * Collectable datatype: Mapping between an X coordinate and a linked list of y-coordinates
+     * @return
+     */
     public abstract Map<Integer, LinkedList<Integer>> getPos();
 }

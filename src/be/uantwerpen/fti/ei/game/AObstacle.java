@@ -3,6 +3,9 @@ package be.uantwerpen.fti.ei.game;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Blueprint for the obstacles used in the game, which only have to be visualized at the right position
+ */
 public abstract class AObstacle extends AEntity {
 
     @Override

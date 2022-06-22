@@ -1,7 +1,10 @@
 package be.uantwerpen.fti.ei.game;
 
 import be.uantwerpen.fti.ei.components.Cmovement;
-import jdk.jfr.BooleanFlag;
+
+/**
+ * Blueprint for the player object with position control, score system and helper signals
+ */
 
 public abstract class APlayer {
     public abstract void vis();
@@ -15,7 +18,17 @@ public abstract class APlayer {
     public abstract void setDy(float newdy);
     public abstract float getDy();
     public abstract float getDx();
+
+    /**
+     * Signal needed for when the player wants to jump
+     * @return
+     */
     public abstract boolean isStanding();
+
+    /**
+     * Signal needed for firing a bullet
+     * @return
+     */
     public abstract boolean isLookingRight();
     public abstract void setLookingRight(boolean b);
     public abstract void setStanding(boolean b);

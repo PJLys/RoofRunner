@@ -4,21 +4,28 @@ import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * Key input class sets input flags in an array that will be read in the game class
+ */
 public class Input {
-    public enum Inputs {LEFT, RIGHT, UP, SPACE};
     private boolean key_event = false;
     private final boolean[] inflags = new boolean[5];
 
+    /**
+     * Creates a key listener on the frame
+     * @param gctx
+     */
     public Input(GraphicsCTX gctx) {
         gctx.getFrame().addKeyListener(new KeyInputAdapter());
     }
-    public boolean inputAvailable(){
-        return key_event;
-    }
+
     public boolean[] getInput() {
         return inflags;
     }
 
+    /**
+     * Sets a flag high when a key is pressed
+     */
     class KeyInputAdapter extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
@@ -34,6 +41,10 @@ public class Input {
             }
         }
 
+        /**
+         * Sets a flag low when a key is released
+         * @param e
+         */
         public void keyReleased(KeyEvent e){
             key_event = true;
             int keyCode = e.getKeyCode();

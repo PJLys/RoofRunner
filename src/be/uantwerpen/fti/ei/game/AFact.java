@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 
+/**
+ * Blueprint for the factory, which creates all objects used in the game.
+ */
 public abstract class AFact {
     public abstract APlayer createPlayer(float x, float y, int lives);
     public abstract AEnemy createEnemy(ArrayList<Integer> x, ArrayList<Integer> y, ArrayList<Integer> d, ArrayList<Character> type, float framerate);
