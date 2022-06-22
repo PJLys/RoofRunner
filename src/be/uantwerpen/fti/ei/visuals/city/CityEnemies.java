@@ -9,10 +9,16 @@ import java.util.AbstractMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+/**
+ * Visualizes the enemies with enemy images
+ */
 public class CityEnemies extends AEnemy {
     /**
-     * AEnemy is a linked list of all the enemy positions types and movement distances
-     *
+     * AEnemy is a linked list which stores following data:
+     *      - Movement component
+     *      - Enemy Type
+     *      - Min position
+     *      - Max position
      * @param displacement
      */
     private LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer,Integer>>> enemylist;
@@ -25,6 +31,10 @@ public class CityEnemies extends AEnemy {
         this.framerate = framerate;
     }
 
+    /**
+     * Iterate through enemies and draw the enemy image in the corresponding place
+     * @param displacement
+     */
     @Override
     public void vis(int displacement) {
         Graphics2D g2d = gctx.getG2d();
@@ -33,6 +43,10 @@ public class CityEnemies extends AEnemy {
             g2d.drawImage(gctx.enemy_image, (int) mov.getX()-displacement, (int) mov.getY(), null);
         }
     }
+
+    /**
+     * Iterate through enemies and check type, update position according to type and bounds
+     */
     public void update() {
         for (var enemy:enemylist){
             Character type = enemy.getKey().getValue();
@@ -68,7 +82,6 @@ public class CityEnemies extends AEnemy {
     public LinkedList<AbstractMap.SimpleEntry<Map.Entry<Cmovement, Character>, Map.Entry<Integer, Integer>>> getEnemyList() {
         return this.enemylist;
     }
-
     public GraphicsCTX getGctx() {
         return this.gctx;
     }

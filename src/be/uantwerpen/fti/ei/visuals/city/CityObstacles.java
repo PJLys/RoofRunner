@@ -3,12 +3,13 @@ package be.uantwerpen.fti.ei.visuals.city;
 import be.uantwerpen.fti.ei.game.AObstacle;
 import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Implementation of the obstacle class for an image based theme (concrete blocks)
+ */
 public class CityObstacles extends AObstacle {
     private CityGCTX gctx;
     private final Map<Integer, ArrayList<Integer>> pos;
@@ -18,6 +19,10 @@ public class CityObstacles extends AObstacle {
         this.pos=pos;
     }
 
+    /**
+     * Places the obstacle image on the right position
+     * @param displacement
+     */
     @Override
     public void vis(int displacement) {
         Graphics2D g2d = gctx.getG2d();

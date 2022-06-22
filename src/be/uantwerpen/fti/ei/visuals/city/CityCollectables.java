@@ -7,6 +7,9 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.Map;
 
+/**
+ * Represents the Collectables with rubies
+ */
 public class CityCollectables extends ACollectable {
     Map<Integer, LinkedList<Integer>> pos;
     CityGCTX gctx;
@@ -16,6 +19,10 @@ public class CityCollectables extends ACollectable {
         this.gctx = (CityGCTX) gctx;
     }
 
+    /**
+     * Places a ruby on the right position of the frame
+     * @param displacement
+     */
     @Override
     public void vis(int displacement) {
         Graphics2D g2d = getGctx().getG2d();

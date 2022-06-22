@@ -9,6 +9,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Extends the graphical context from the J2D graphics and adds image loading and resizing
+ */
 public class CityGCTX extends GraphicsCTX {
     private final int ScreenWidth;
     private final int ScreenHeight;
@@ -79,6 +82,10 @@ public class CityGCTX extends GraphicsCTX {
         resizeAll();
     }
 
+    /**
+     * Loads images from corresponding file locations
+     * @throws IOException
+     */
     private void loadImages() throws IOException {
         obstacle_image = ImageIO.read(new File("src\\be\\uantwerpen\\fti\\ei\\visuals\\city\\images\\obstacle.png"));
         player_image_right = ImageIO.read(new File("src\\be\\uantwerpen\\fti\\ei\\visuals\\city\\images\\playersprites\\Jump__003.png"));
@@ -89,19 +96,31 @@ public class CityGCTX extends GraphicsCTX {
         projectile_image_left = ImageIO.read(new File("src\\be\\uantwerpen\\fti\\ei\\visuals\\city\\images\\playersprites\\Kunai_L.png"));
 
     }
+
+    /**
+     * Resizes the images to fit the intended width and height
+     * @param originalImage
+     * @param targetWidth
+     * @param targetHeight
+     * @return
+     */
     private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight){
         Image resultingImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_DEFAULT);
         BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_4BYTE_ABGR_PRE);
         outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
         return outputImage;
     }
+
+    /**
+     * Resize all images to fit to the blocksize
+     */
     private void resizeAll(){
         obstacle_image = resizeImage(obstacle_image,size,size);
         player_image_right = resizeImage(player_image_right, (int) (size*.8), (int) (size*1.6));
         player_image_left = resizeImage(player_image_left, (int) (size*.8), (int) (size*1.6));
         collectable_image = resizeImage(collectable_image,size,size);
         enemy_image = resizeImage(enemy_image,size,size);
-        projectile_image_right = resizeImage(projectile_image_right,20,5);
-        projectile_image_left = resizeImage(projectile_image_left,20,5);
+        projectile_image_right = resizeImage(projectile_image_right,(int) (size/7*2),(int) (size/14));
+        projectile_image_left = resizeImage(projectile_image_left,(int) (size/7*2),(int) (size/14));
     }
 }

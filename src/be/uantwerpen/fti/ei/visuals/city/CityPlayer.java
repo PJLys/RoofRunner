@@ -6,12 +6,18 @@ import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 
 import java.awt.*;
 
+/**
+ * Visualizes the player with an image of an assassin character
+ */
 public class CityPlayer extends APlayer {
     private CityGCTX gctx;
     private Cmovement c_mov;
     private boolean lookingRight;
     private int lives;
 
+    /**
+     * The player image will always be visualized at the same horizontal position on the screen and
+     */
     @Override
     public void vis() {
         Graphics2D g2d = gctx.getG2d();
@@ -73,12 +79,14 @@ public class CityPlayer extends APlayer {
         this.lives=lives;
     }
 
-    public void SetGctx(CityGCTX gctx){
-        this.gctx=gctx;
-    }
     public GraphicsCTX getGctx(){
         return this.gctx;
     }
+
+    /**
+     * Constructor which sets the amount of lives at 3 (standard)
+     * @param gctx
+     */
     public CityPlayer(GraphicsCTX gctx){
         this.gctx= (CityGCTX) gctx;
         this.lives=3;

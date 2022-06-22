@@ -24,6 +24,10 @@ public class CityBullets extends ABullet {
         this.cmovList = new LinkedList<Cmovement>();
     }
 
+    /**
+     * Visualise the projectiles with throwing knives.
+     * @param displacement
+     */
     @Override
     public void vis(int displacement) {
         Graphics2D g2d = gctx.getG2d();
@@ -38,9 +42,17 @@ public class CityBullets extends ABullet {
     public LinkedList<Cmovement> getCmov() {
         return this.cmovList;
     }
+
+    /**
+     * Fires the bullet from the middle of the player in the right direction with the correct speed
+     * @param playerx
+     * @param playery
+     * @param direction
+     * @param framerate
+     */
     public void fire(int playerx, int playery, boolean direction, float framerate) {
-        int playersize = (int) (this.gctx.getSize()*.8);
-        if (cmovList.size()<2) { //Max number of bullets to avoid rapidfire & concurrency exceptions
+        int playersize = (int) (this.gctx.getSize() * .8);
+        if (cmovList.size() < 2) { //Max number of bullets to avoid rapidfire & concurrency exceptions
             if (direction) {
                 Cmovement cmov = new Cmovement(playerx + playersize, playery + playersize);
                 cmov.setDx(1000 / framerate);
@@ -52,6 +64,10 @@ public class CityBullets extends ABullet {
             cmovList.add(cmov);
         }
     }
+
+    /**
+     * Call the position update function on the movement component
+     */
     public void update() {
         for (Cmovement cmov:cmovList){
             cmov.update();
