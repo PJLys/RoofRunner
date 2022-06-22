@@ -52,6 +52,8 @@ public class GraphicsCTX {
         frame.setVisible(true);
     }
 
+
+
     /**
      * Repaint the panel
      */
@@ -71,7 +73,6 @@ public class GraphicsCTX {
         if (g2d != null)
             g2d.clearRect(0,0,frame.getWidth(),frame.getHeight());
     }
-
 
     /**
      * Sets blocksize and background, creates a new Buffered Image

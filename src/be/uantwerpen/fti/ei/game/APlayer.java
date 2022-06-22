@@ -7,7 +7,7 @@ import be.uantwerpen.fti.ei.components.Cmovement;
  */
 
 public abstract class APlayer {
-    public abstract void vis();
+    public abstract void vis(int score);
     public abstract void setC_mov(Cmovement c_mov);
     public abstract Cmovement getC_mov();
 

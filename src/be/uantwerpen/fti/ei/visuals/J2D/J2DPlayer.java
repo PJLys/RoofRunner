@@ -22,7 +22,7 @@ public class J2DPlayer extends APlayer {
      *      - Cyan when looking left
      */
     @Override
-    public void vis() {
+    public void vis(int score) {
         Graphics2D g2d = gctx.getG2d();
         int playersize = (int) (gctx.getSize()*.8);
         if (isLookingRight())

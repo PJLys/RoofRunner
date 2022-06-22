@@ -1,5 +1,6 @@
 package be.uantwerpen.fti.ei.game;
 
+import javax.rmi.ssl.SslRMIClientSocketFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class Game {
     private double framerate = initial_framerate;
     private boolean shoot_enable = true;
     private Instant prev_instance;
-    short lvl = 1;
+    short lvl = 2;
     private boolean newframe = false;
     private Timer timer = new Timer();
     private TimerTask task = new TimerTask() {
@@ -136,14 +137,15 @@ public class Game {
                     collectable.vis(displacement);
                     enemies.vis(displacement);
                     bullet.vis(displacement);
-                    player.vis();
+                    player.vis(score);
                 } catch (NullPointerException e){
                     System.out.println(e.getMessage());
                 }
 
+
+
                 af.getGctx().render();
                 if (y1>1000) {
-                    System.out.println(y1);
                     running = !running;
                 }
                 if (player.getLives()==0)

@@ -7,13 +7,15 @@ import be.uantwerpen.fti.ei.visuals.GraphicsCTX;
 import java.awt.*;
 import java.util.LinkedList;
 
+/**
+ * Represents the projectiles with throwing knive images
+ */
 public class CityBullets extends ABullet {
     /**
      * Bullet data type
      * Linked list
      * - Easy add/remove
      * - No iteration problems when out of order remove (instead of FIFO)
-     *
      * @return
      */
     private LinkedList<Cmovement> cmovList;
@@ -21,7 +23,7 @@ public class CityBullets extends ABullet {
 
     public CityBullets(GraphicsCTX gctx){
         this.gctx = (CityGCTX) gctx;
-        this.cmovList = new LinkedList<Cmovement>();
+        this.cmovList = new LinkedList<>();
     }
 
     /**

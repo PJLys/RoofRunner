@@ -19,13 +19,17 @@ public class CityPlayer extends APlayer {
      * The player image will always be visualized at the same horizontal position on the screen and
      */
     @Override
-    public void vis() {
+    public void vis(int score) {
         Graphics2D g2d = gctx.getG2d();
         if (isLookingRight())
             g2d.drawImage(gctx.player_image_right, 4*gctx.getSize(), (int) this.c_mov.getY(),null);
         else {
             g2d.drawImage(gctx.player_image_left, 4*gctx.getSize(), (int) this.c_mov.getY(),null);
         }
+        g2d.setFont(new Font("Calibri", Font.BOLD,20));
+        g2d.setPaint(Color.WHITE);
+        g2d.drawString("Score: "+score, 1300, 30);
+        g2d.drawString("Lives: "+lives, 1300, 50);
     }
     public void setC_mov(Cmovement c_mov) {
         this.c_mov=c_mov;
